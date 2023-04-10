@@ -108,22 +108,6 @@ public class FXMLDocumentController implements Initializable {
                         } else {
                             map[i][j].setStyle("-fx-background-color: green");
                         }
-
-//                        if (i == 0 || j == 0 || i == 29 || j == 49){
-//                            map[i][j].setStyle("-fx-background-color: black");
-//                        }
-//                        if (j < 7)
-//                            map[i][j].setStyle("-fx-background-color: blue");
-//                        else if (j > 42) {
-//                            map[i][j].setStyle("-fx-background-color: red");
-//                        }
-//                        if (j >= 7 && i < 10 && j <= 42){
-//                            map[i][j].setStyle("-fx-background-color: yellow");
-//                        } else if (j >= 7 && j <= 42 && i > 20){
-//                            map[i][j].setStyle("-fx-background-color: yellow");
-//                        } else if (j >= 7 && j <= 42 && i <= 20 && i >= 10) {
-//                            map[i][j].setStyle("-fx-background-color: green");
-//                        }
                         MAP.add(map[i][j], j, i);
                     }
                 }

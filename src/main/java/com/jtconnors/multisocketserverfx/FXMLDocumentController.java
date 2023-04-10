@@ -91,20 +91,42 @@ public class FXMLDocumentController implements Initializable {
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
                         map[i][j] = new Button();
-                        map[i][j].setPrefSize(1, 1);
-                        map[i][j].setPrefHeight(1);
-                        map[i][j].setPrefWidth(1);
+//                        map[i][j].setPrefSize(10, 10);
+                        map[i][j].setPrefHeight(20);
+                        map[i][j].setPrefWidth(20);
 //                map[i][j] = new ImageView();
 //                map[i][j].setEffect(c);
 //                map[i][j].setFitHeight(70);
 //                map[i][j].setFitWidth(70);
-                        if (i == 0 || j == 0 || i == 49 || j == 29){
-                            map[i][j].setStyle("-fx-background-color: black");
+
+                        if (i > 89 && j < 10){
+                            map[i][j].setStyle("-fx-background-color: blue");
+                        } else if (i < 10 && j > 89){
+                            map[i][j].setStyle("-fx-background-color: red");
+                        } else if ((i < 10 && j >= 10 && j <= 89) || (j < 10 && i <= 89) || (i > 89 && j >= 10 && j <= 89) || (j > 89 && i >= 10)){
+                            map[i][j].setStyle("-fx-background-color: yellow");
+                        } else {
+                            map[i][j].setStyle("-fx-background-color: green");
                         }
+
+//                        if (i == 0 || j == 0 || i == 29 || j == 49){
+//                            map[i][j].setStyle("-fx-background-color: black");
+//                        }
+//                        if (j < 7)
+//                            map[i][j].setStyle("-fx-background-color: blue");
+//                        else if (j > 42) {
+//                            map[i][j].setStyle("-fx-background-color: red");
+//                        }
+//                        if (j >= 7 && i < 10 && j <= 42){
+//                            map[i][j].setStyle("-fx-background-color: yellow");
+//                        } else if (j >= 7 && j <= 42 && i > 20){
+//                            map[i][j].setStyle("-fx-background-color: yellow");
+//                        } else if (j >= 7 && j <= 42 && i <= 20 && i >= 10) {
+//                            map[i][j].setStyle("-fx-background-color: green");
+//                        }
                         MAP.add(map[i][j], j, i);
                     }
                 }
-
                 break;
         }
     }
@@ -210,7 +232,7 @@ public class FXMLDocumentController implements Initializable {
 
 //    ImageView[][] map = new ImageView[200][100];
 
-    Button[][] map = new Button[50][30];
+    Button[][] map = new Button[100][100];
 
     @FXML
     private GridPane MAP;

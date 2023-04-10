@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="MultiSocketServerFX" target="17" />
+      <module name="MultiSocketServerFX" target="18" />
     </bytecodeTargetLevel>
   </component>
 </project>

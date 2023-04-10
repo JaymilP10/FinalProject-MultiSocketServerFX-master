@@ -127,6 +127,34 @@ public class FXMLDocumentController implements Initializable {
                         MAP.add(map[i][j], j, i);
                     }
                 }
+
+                int x = 10;
+                for (int i = 10; i <= 89; i++) {
+
+                    for (int k = 0; k <= 7; k++) {
+                        map[i + k][x].setStyle("-fx-background-color: blue");
+                        map[i][x + k].setStyle("-fx-background-color: blue");
+                    }
+                    x++;
+                }
+
+                int j = 10;
+                for (int i = 89; i >= 10; i--) {
+                    for (int k = 0; k <= 7; k++) {
+                        map[i + k][j].setStyle("-fx-background-color: yellow");
+                        map[i - k][j].setStyle("-fx-background-color: yellow");
+                    }
+//                    map[i][j].setStyle("-fx-background-color: yellow");
+//                    map[i-1][j].setStyle("-fx-background-color: yellow");
+//                    map[i-2][j].setStyle("-fx-background-color: yellow");
+//                    map[i-3][j].setStyle("-fx-background-color: yellow");
+//                    map[i-4][j].setStyle("-fx-background-color: yellow");
+//                    map[i+1][j].setStyle("-fx-background-color: yellow");
+//                    map[i+2][j].setStyle("-fx-background-color: yellow");
+//                    map[i+3][j].setStyle("-fx-background-color: yellow");
+//                    map[i+4][j].setStyle("-fx-background-color: yellow");
+                    j++;
+                }
                 break;
         }
     }
@@ -233,6 +261,8 @@ public class FXMLDocumentController implements Initializable {
 //    ImageView[][] map = new ImageView[200][100];
 
     Button[][] map = new Button[100][100];
+
+    int[][] intMap = new int[100][100];
 
     @FXML
     private GridPane MAP;

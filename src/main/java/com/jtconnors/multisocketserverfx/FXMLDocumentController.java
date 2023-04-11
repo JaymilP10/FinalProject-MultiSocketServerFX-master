@@ -9,12 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 
 import com.jtconnors.socketfx.FxMultipleSocketServer;
 import javafx.scene.effect.ColorAdjust;
@@ -88,25 +83,23 @@ public class FXMLDocumentController implements Initializable {
                 }
                 connectionsLabel.setText(new String(connectionsSB));
 
+                ProgressBar pb = new ProgressBar();
+
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
                         map[i][j] = new Button();
 //                        map[i][j].setPrefSize(10, 10);
                         map[i][j].setPrefHeight(20);
                         map[i][j].setPrefWidth(20);
-//                map[i][j] = new ImageView();
-//                map[i][j].setEffect(c);
-//                map[i][j].setFitHeight(70);
-//                map[i][j].setFitWidth(70);
 
                         if (i > 89 && j < 10){
-                            map[i][j].setStyle("-fx-background-color: blue");
+                            intMap[i][j] = 1;
                         } else if (i < 10 && j > 89){
-                            map[i][j].setStyle("-fx-background-color: red");
+                            intMap[i][j] = 2;
                         } else if ((i < 10 && j >= 10 && j <= 89) || (j < 10 && i <= 89) || (i > 89 && j >= 10 && j <= 89) || (j > 89 && i >= 10)){
-                            map[i][j].setStyle("-fx-background-color: yellow");
+                            intMap[i][j] = 3;
                         } else {
-                            map[i][j].setStyle("-fx-background-color: green");
+                            intMap[i][j] = 4;
                         }
                         MAP.add(map[i][j], j, i);
                     }
@@ -114,10 +107,9 @@ public class FXMLDocumentController implements Initializable {
 
                 int x = 10;
                 for (int i = 10; i <= 89; i++) {
-
                     for (int k = 0; k <= 7; k++) {
-                        map[i + k][x].setStyle("-fx-background-color: blue");
-                        map[i][x + k].setStyle("-fx-background-color: blue");
+                        intMap[i + k][x] = 1;
+                        intMap[i][x + k] = 1;
                     }
                     x++;
                 }
@@ -125,11 +117,12 @@ public class FXMLDocumentController implements Initializable {
                 int j = 10;
                 for (int i = 89; i >= 10; i--) {
                     for (int k = 0; k <= 7; k++) {
-                        map[i + k][j].setStyle("-fx-background-color: yellow");
-                        map[i - k][j].setStyle("-fx-background-color: yellow");
+                        intMap[i + k][j] = 3;
+                        intMap[i - k][j] = 3;
                     }
                     j++;
                 }
+                updateScreen();
                 break;
         }
     }
@@ -242,7 +235,19 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private GridPane MAP;
 
-    @FXML
-    private void initialize(){
+    private void updateScreen(){
+        for (int i = 0; i < intMap.length; i++) {
+            for (int j = 0; j < intMap[0].length; j++) {
+                if (intMap[i][j] == 1){
+                    map[i][j].setStyle("-fx-background-color: blue");
+                } else if (intMap[i][j] == 2){
+                    map[i][j].setStyle("-fx-background-color: red");
+                } else if (intMap[i][j] == 3){
+                    map[i][j].setStyle("-fx-background-color: yellow");
+                } else if (intMap[i][j] == 4){
+                    map[i][j].setStyle("-fx-background-color: green");
+                }
+            }
+        }
     }
 }

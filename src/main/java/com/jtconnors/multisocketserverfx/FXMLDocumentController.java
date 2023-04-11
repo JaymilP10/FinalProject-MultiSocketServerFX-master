@@ -83,8 +83,6 @@ public class FXMLDocumentController implements Initializable {
                 }
                 connectionsLabel.setText(new String(connectionsSB));
 
-                ProgressBar pb = new ProgressBar();
-
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
                         map[i][j] = new Button();
@@ -122,6 +120,19 @@ public class FXMLDocumentController implements Initializable {
                     }
                     j++;
                 }
+
+                //walls
+                for (int i = 0; i < map.length; i++) {
+                    for (int k = 0; k < map[0].length; k++) {
+                        if (j == 10 && i > 10 && i < 89){
+                            intMap[i][j] = 5;
+                        }
+                        if (i == 10 && j > 10 && j < 89){
+                            intMap[i][j] = 5;
+                        }
+                    }
+                }
+
                 updateScreen();
                 break;
         }
@@ -246,6 +257,8 @@ public class FXMLDocumentController implements Initializable {
                     map[i][j].setStyle("-fx-background-color: yellow");
                 } else if (intMap[i][j] == 4){
                     map[i][j].setStyle("-fx-background-color: green");
+                } else if (intMap[i][j] == 5){
+                    map[i][j].setStyle("-fx-background-color: brown");
                 }
             }
         }

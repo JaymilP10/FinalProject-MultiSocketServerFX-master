@@ -84,7 +84,6 @@ public class FXMLDocumentController implements Initializable {
                 int numConnections = 1;
                 numConnections += socketServer.getListenerCount();
                 StringBuilder connectionsSB = new StringBuilder("Waiting for players (" + numConnections + "/8)");
-
                 connectionsLabel.setText("Waiting for players (" + numConnections + "/8)");
                 if (numConnections == 2) {
                     btnFindMatch.setDisable(true);

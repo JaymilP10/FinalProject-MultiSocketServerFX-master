@@ -29,15 +29,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button sendButton;
     @FXML
-    private Label connectionsLabel;
+    private Label connectionsLabel, lblPickLoadout;
     @FXML
-    private Button connectButton;
+    private Button connectButton, btnEnterName, btnFindMatch;
     @FXML
     private Button disconnectButton;
     @FXML
     private Label lblPort;
     @FXML
-    private TextField portTextField;
+    private TextField portTextField, txtName;
     @FXML
     private ListView<String> rcvdMsgsListView;
     private ObservableList<String> sentMsgsData;
@@ -49,6 +49,12 @@ public class FXMLDocumentController implements Initializable {
     private ListView<String> lastSelectedListView;
     private Tooltip portTooltip;
 
+    @FXML
+    private ListView lstPrimaryWeapon, lstSecondaryWeapon, lstItem;
+
+    @FXML
+    private ScrollPane scrollPane;
+
     public enum ConnectionDisplayState {
 
         DISCONNECTED, WAITING, CONNECTED
@@ -57,33 +63,42 @@ public class FXMLDocumentController implements Initializable {
     private void displayState(ConnectionDisplayState state) {
         switch (state) {
             case DISCONNECTED:
-                connectButton.setDisable(false);
+                btnFindMatch.setDisable(false);
                 disconnectButton.setDisable(true);
 //                sendButton.setDisable(true);
 //                sendTextField.setDisable(true);
                 connectionsLabel.setText("Not connected");
                 break;
             case WAITING:
-                connectButton.setDisable(true);
+                btnFindMatch.setDisable(true);
                 disconnectButton.setDisable(false);
 //                sendButton.setDisable(false);
 //                sendTextField.setDisable(false);
-                connectionsLabel.setText("Waiting for connections");
+                connectionsLabel.setText("Waiting for connections (1/8)");
                 break;
             case CONNECTED:
-                connectButton.setDisable(true);
+                btnFindMatch.setDisable(true);
                 disconnectButton.setDisable(false);
 //                sendButton.setDisable(false);
 //                sendTextField.setDisable(false);
-                int numConnections = socketServer.getListenerCount();
-                StringBuilder connectionsSB
-                        = new StringBuilder(numConnections + " connection");
-                if (numConnections != 1) {
-                    connectionsSB.append("s");
-                }
-                connectionsLabel.setText(new String(connectionsSB));
+                int numConnections = 1;
+                numConnections += socketServer.getListenerCount();
+                StringBuilder connectionsSB = new StringBuilder("Waiting for players (" + numConnections + "/8)");
 
-                ProgressBar pb = new ProgressBar();
+                connectionsLabel.setText("Waiting for players (" + numConnections + "/8)");
+                if (numConnections == 2) {
+                    btnFindMatch.setDisable(true);
+                    btnEnterName.setDisable(true);
+                    btnEnterName.setVisible(false);
+                    btnFindMatch.setVisible(false);
+                    lblPickLoadout.setVisible(true);
+                    lstPrimaryWeapon.setVisible(true);
+                    lstSecondaryWeapon.setVisible(true);
+                    lstItem.setVisible(true);
+                    scrollPane.setVisible(false);
+//                    connectionsSB.append("s");
+                }
+//                connectionsLabel.setText(new String(connectionsSB));
 
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
@@ -125,6 +140,14 @@ public class FXMLDocumentController implements Initializable {
                 updateScreen();
                 break;
         }
+    }
+
+    @FXML
+    private void pickLoadout(){
+        lstPrimaryWeapon.setVisible(false);
+        lstSecondaryWeapon.setVisible(false);
+        lstItem.setVisible(false);
+        scrollPane.setVisible(true);
     }
 
     class FxSocketListener implements SocketListener {
@@ -185,6 +208,14 @@ public class FXMLDocumentController implements Initializable {
             }
         });
 
+    }
+
+    private String playerName;
+
+    @FXML
+    private void enterName(){
+        playerName = txtName.getText();
+        btnFindMatch.setDisable(false);
     }
 
     @FXML

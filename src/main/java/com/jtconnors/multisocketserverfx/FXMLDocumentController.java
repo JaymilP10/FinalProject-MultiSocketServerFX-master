@@ -50,7 +50,7 @@ public class FXMLDocumentController implements Initializable {
     private Tooltip portTooltip;
 
     @FXML
-    private ListView lstPrimaryWeapon, lstSecondaryWeapon, lstItem;
+    private ListView lstPrimaryWeapon, lstSecondaryWeapon, lstItems;
 
     @FXML
     private ScrollPane scrollPane;
@@ -93,50 +93,13 @@ public class FXMLDocumentController implements Initializable {
                     lblPickLoadout.setVisible(true);
                     lstPrimaryWeapon.setVisible(true);
                     lstSecondaryWeapon.setVisible(true);
-                    lstItem.setVisible(true);
+                    lstItems.setVisible(true);
                     scrollPane.setVisible(false);
+                    socketServer.postUpdate("Update Screen");
 //                    connectionsSB.append("s");
                 }
 //                connectionsLabel.setText(new String(connectionsSB));
 
-                for (int i = 0; i < map.length; i++) {
-                    for (int j = 0; j < map[0].length; j++) {
-                        map[i][j] = new Button();
-//                        map[i][j].setPrefSize(10, 10);
-                        map[i][j].setPrefHeight(20);
-                        map[i][j].setPrefWidth(20);
-
-                        if (i > 89 && j < 10){
-                            intMap[i][j] = 1;
-                        } else if (i < 10 && j > 89){
-                            intMap[i][j] = 2;
-                        } else if ((i < 10 && j >= 10 && j <= 89) || (j < 10 && i <= 89) || (i > 89 && j >= 10 && j <= 89) || (j > 89 && i >= 10)){
-                            intMap[i][j] = 3;
-                        } else {
-                            intMap[i][j] = 4;
-                        }
-                        MAP.add(map[i][j], j, i);
-                    }
-                }
-
-                int x = 10;
-                for (int i = 10; i <= 89; i++) {
-                    for (int k = 0; k <= 7; k++) {
-                        intMap[i + k][x] = 1;
-                        intMap[i][x + k] = 1;
-                    }
-                    x++;
-                }
-
-                int j = 10;
-                for (int i = 89; i >= 10; i--) {
-                    for (int k = 0; k <= 7; k++) {
-                        intMap[i + k][j] = 3;
-                        intMap[i - k][j] = 3;
-                    }
-                    j++;
-                }
-                updateScreen();
                 break;
         }
     }
@@ -145,8 +108,9 @@ public class FXMLDocumentController implements Initializable {
     private void pickLoadout(){
         lstPrimaryWeapon.setVisible(false);
         lstSecondaryWeapon.setVisible(false);
-        lstItem.setVisible(false);
+        lstItems.setVisible(false);
         scrollPane.setVisible(true);
+
     }
 
     class FxSocketListener implements SocketListener {
@@ -207,6 +171,43 @@ public class FXMLDocumentController implements Initializable {
             }
         });
 
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                map[i][j] = new Button();
+//                        map[i][j].setPrefSize(10, 10);
+                map[i][j].setPrefHeight(20);
+                map[i][j].setPrefWidth(20);
+
+                if (i > 89 && j < 10){
+                    intMap[i][j] = 1;
+                } else if (i < 10 && j > 89){
+                    intMap[i][j] = 2;
+                } else if ((i < 10 && j >= 10 && j <= 89) || (j < 10 && i <= 89) || (i > 89 && j >= 10 && j <= 89) || (j > 89 && i >= 10)){
+                    intMap[i][j] = 3;
+                } else {
+                    intMap[i][j] = 4;
+                }
+                MAP.add(map[i][j], j, i);
+            }
+        }
+
+        int x = 10;
+        for (int i = 10; i <= 89; i++) {
+            for (int k = 0; k <= 7; k++) {
+                intMap[i + k][x] = 1;
+                intMap[i][x + k] = 1;
+            }
+            x++;
+        }
+
+        int j = 10;
+        for (int i = 89; i >= 10; i--) {
+            for (int k = 0; k <= 7; k++) {
+                intMap[i + k][j] = 3;
+                intMap[i - k][j] = 3;
+            }
+            j++;
+        }
     }
 
     private String playerName;
@@ -276,6 +277,9 @@ public class FXMLDocumentController implements Initializable {
                     map[i][j].setStyle("-fx-background-color: yellow");
                 } else if (intMap[i][j] == 4){
                     map[i][j].setStyle("-fx-background-color: green");
+                }
+                if (intMap[i][j] == 5){
+                    map[i][j].setStyle("-fx-background-color: black");
                 }
             }
         }

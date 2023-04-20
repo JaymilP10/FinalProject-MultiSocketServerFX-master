@@ -19,4 +19,8 @@ public class Weapon {
         this.ammo = maxAmmo;
         this.maxAmmo = maxAmmo;
     }
+
+    public void fire(int x, int y){
+
+    }
 }

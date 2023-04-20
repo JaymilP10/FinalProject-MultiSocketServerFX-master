@@ -3,10 +3,13 @@ package com.jtconnors.multisocketserverfx;
 import com.jtconnors.socket.SocketListener;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,6 +17,7 @@ import javafx.scene.control.*;
 import com.jtconnors.socketfx.FxMultipleSocketServer;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -218,6 +222,34 @@ public class FXMLDocumentController implements Initializable {
         btnFindMatch.setDisable(false);
     }
 
+    private double startTime;
+    private void inGame(ActionEvent event){
+        EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                //all button code goes here
+                for (int i = 0; i < 5; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        if (((Button) event.getSource()) == map[i][j]){
+//                            System.out.println("oc:"+i+"or:"+j);
+                            startTime = System.nanoTime();
+                            new AnimationTimer(){
+                                @Override
+                                public void handle(long now) {
+                                    if(startTime>0){
+                                        if (now - startTime > (900000000.0 * 2)){
+                                            this.stop();
+                                        }
+                                    }
+                                }
+                            }.start();
+                        }
+                    }
+                }
+            }
+        };
+    }
+
     @FXML
     private void handleClearRcvdMsgsButton(ActionEvent event) {
         rcvdMsgsData.clear();
@@ -277,8 +309,7 @@ public class FXMLDocumentController implements Initializable {
                     map[i][j].setStyle("-fx-background-color: yellow");
                 } else if (intMap[i][j] == 4){
                     map[i][j].setStyle("-fx-background-color: green");
-                }
-                if (intMap[i][j] == 5){
+                } else if (intMap[i][j] == 5){
                     map[i][j].setStyle("-fx-background-color: black");
                 }
             }

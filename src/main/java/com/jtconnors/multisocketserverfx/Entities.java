@@ -41,7 +41,7 @@ public class Entities {
         healthBar.setProgress(progress);
     }
 
-    public void changeLoc(int x, int y){
+    public void changeLoc(int x, int y, int targetX, int targetY){
 
     }
 

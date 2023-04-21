@@ -41,9 +41,69 @@ public class Entities {
         healthBar.setProgress(progress);
     }
 
-    public void changeLoc(int x, int y, int targetX, int targetY){
+    public void changeLoc(int [][] map, int targetX, int targetY){
+        int tempx = xLoc;
+        int tempy = yLoc;
+        if (targetY > tempy && targetX > tempx && map[tempx + 1][tempy + 1] != 5){
+            tempy++;
+            tempx++;
+        } else if (targetY == tempy && targetX > tempx && map[tempx + 1][tempy] != 5) {
+            tempx++;
+        } else if (targetY < tempy && targetX > tempx && map[tempx + 1][tempy - 1] != 5) {
+            tempy--;
+            tempx++;
+        } else if (targetY < tempy && targetX < tempx && map[tempx - 1][tempy - 1] != 5) {
+            tempy--;
+            tempx--;
+        } else if (targetY < tempy && targetX == tempx && map[tempx][tempy - 1] != 5) {
+            tempy--;
+        } else if (targetY > tempy && targetX == tempx && map[tempx][tempy + 1] != 5) {
+            tempy++;
+        } else if (targetY == tempy && targetX < tempx && map[tempx - 1][tempy] != 5) {
+            tempx--;
+        } else if (targetY > tempy && targetX < tempx && map[tempx - 1][tempy + 1] != 5) {
+            tempy++;
+            tempx--;
+        }
 
+        if (tempy == targetY && tempx == targetX) {
+            map[tempx][tempy] = 6;
+        } else {
+            map[tempx][tempy] = 6;
+            map[xLoc][yLoc] = 0;
+            xLoc = tempx;
+            yLoc = tempy;
+        }
     }
+
+    public void checkWalls(int [][] map){
+        int count;
+        int tempx = xLoc;
+        int tempy = yLoc;
+        if (map[tempx + 1][tempy + 1] == 5){
+            tempy++;
+            tempx++;
+        } else if (map[tempx + 1][tempy] != 5) {
+            tempx++;
+        } else if (map[tempx + 1][tempy - 1] != 5) {
+            tempy--;
+            tempx++;
+        } else if (map[tempx - 1][tempy - 1] != 5) {
+            tempy--;
+            tempx--;
+        } else if (map[tempx][tempy - 1] != 5) {
+            tempy--;
+        } else if (map[tempx][tempy + 1] != 5) {
+            tempy++;
+        } else if (map[tempx - 1][tempy] != 5) {
+            tempx--;
+        } else if (map[tempx - 1][tempy + 1] != 5) {
+            tempy++;
+            tempx--;
+        }
+    }
+
+
 
     public void changeWeapon(Weapon primary, Weapon secondary){
         this.primary = primary;

@@ -175,31 +175,34 @@ public class FXMLDocumentController implements Initializable {
             }
         });
 
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = new Button();
-//                        map[i][j].setPrefSize(10, 10);
-                map[i][j].setPrefHeight(20);
-                map[i][j].setPrefWidth(20);
+        for (int i = 0; i < buttons.length; i++) {
+            for (int j = 0; j < buttons[0].length; j++) {
+                map[i][j].isWall = false;
+                buttons[i][j] = new Button();
+//                        buttons[i][j].setPrefSize(10, 10);
+                buttons[i][j].setPrefHeight(20);
+                buttons[i][j].setPrefWidth(20);
 
                 if (i > 89 && j < 10){
-                    intMap[i][j] = 1;
+                    map[i][j].num = 1;
                 } else if (i < 10 && j > 89){
-                    intMap[i][j] = 2;
+                    map[i][j].num = 2;
                 } else if ((i < 10 && j >= 10 && j <= 89) || (j < 10 && i <= 89) || (i > 89 && j >= 10 && j <= 89) || (j > 89 && i >= 10)){
-                    intMap[i][j] = 3;
+                    map[i][j].num = 3;
                 } else {
-                    intMap[i][j] = 4;
+                    map[i][j].num = 4;
                 }
-                MAP.add(map[i][j], j, i);
+                MAP.add(buttons[i][j], j, i);
             }
         }
 
         int x = 10;
         for (int i = 10; i <= 89; i++) {
             for (int k = 0; k <= 7; k++) {
-                intMap[i + k][x] = 1;
-                intMap[i][x + k] = 1;
+                map[i + k][x].num = 1;
+                map[i][x + k].num = 1;
+                map[i + k][x].isWall = false;
+                map[i][x + k].isWall = false;
             }
             x++;
         }
@@ -207,8 +210,10 @@ public class FXMLDocumentController implements Initializable {
         int j = 10;
         for (int i = 89; i >= 10; i--) {
             for (int k = 0; k <= 7; k++) {
-                intMap[i + k][j] = 3;
-                intMap[i - k][j] = 3;
+                map[i + k][j].num = 3;
+                map[i - k][j].num = 3;
+                map[i + k][j].isWall = false;
+                map[i - k][j].isWall = false;
             }
             j++;
         }
@@ -230,7 +235,7 @@ public class FXMLDocumentController implements Initializable {
                 //all button code goes here
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 4; j++) {
-                        if (((Button) event.getSource()) == map[i][j]){
+                        if (((Button) event.getSource()) == buttons[i][j]){
 //                            System.out.println("oc:"+i+"or:"+j);
                             startTime = System.nanoTime();
                             new AnimationTimer(){
@@ -291,26 +296,26 @@ public class FXMLDocumentController implements Initializable {
 
 //    ImageView[][] map = new ImageView[200][100];
 
-    Button[][] map = new Button[100][100];
+    Button[][] buttons = new Button[100][100];
 
-    int[][] intMap = new int[100][100];
+    Map[][] map = new Map[100][100];
 
     @FXML
     private GridPane MAP;
 
     private void updateScreen(){
-        for (int i = 0; i < intMap.length; i++) {
-            for (int j = 0; j < intMap[0].length; j++) {
-                if (intMap[i][j] == 1){
-                    map[i][j].setStyle("-fx-background-color: blue");
-                } else if (intMap[i][j] == 2){
-                    map[i][j].setStyle("-fx-background-color: red");
-                } else if (intMap[i][j] == 3){
-                    map[i][j].setStyle("-fx-background-color: yellow");
-                } else if (intMap[i][j] == 4){
-                    map[i][j].setStyle("-fx-background-color: green");
-                } else if (intMap[i][j] == 5){
-                    map[i][j].setStyle("-fx-background-color: black");
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j].num == 1){
+                    buttons[i][j].setStyle("-fx-background-color: blue");
+                } else if (map[i][j].num == 2){
+                    buttons[i][j].setStyle("-fx-background-color: red");
+                } else if (map[i][j].num == 3){
+                    buttons[i][j].setStyle("-fx-background-color: yellow");
+                } else if (map[i][j].num == 4){
+                    buttons[i][j].setStyle("-fx-background-color: green");
+                } else if (map[i][j].num == 5){
+                    buttons[i][j].setStyle("-fx-background-color: black");
                 }
             }
         }

@@ -136,31 +136,7 @@ public class FXMLDocumentController implements Initializable {
     Weapon secondaryWeapon = new Weapon();
     int numPlayersReady = 0;
 
-    @FXML
-    private void pickLoadout(ActionEvent event){
-        String primaryWeaponName = lstPrimaryWeapon.getSelectionModel().getSelectedItem().toString();
-        String secondaryWeaponName = lstSecondaryWeapon.getSelectionModel().getSelectedItem().toString();
-        for (Weapon weapon : weapons) {
-            if (weapon.weaponName.equals(primaryWeaponName))
-                primaryWeapon = weapon;
-            else if (weapon.weaponName.equals(secondaryWeaponName))
-                secondaryWeapon = weapon;
-        }
-        btnReady.setDisable(true);
-        btnReady.setVisible(false);
-        numPlayersReady++;
-        socketServer.postUpdate("Ready" + numPlayersReady);
-        if (numPlayersReady == 2){
-            lstPrimaryWeapon.setVisible(false);
-            lstSecondaryWeapon.setVisible(false);
-            lstItems.setVisible(false);
-            scrollPane.setVisible(true);
-            txtName.setVisible(false);
-            btnEnterName.setVisible(false);
-            lblPickLoadout.setVisible(false);
-            updateScreen();
-        }
-    }
+    ArrayList<Player> players = new ArrayList<>();
 
     Monsters dragon;
 
@@ -185,10 +161,91 @@ public class FXMLDocumentController implements Initializable {
                     txtName.setVisible(false);
                     btnEnterName.setVisible(false);
                     lblPickLoadout.setVisible(false);
-                    updateScreen();
+                    start();
+                }
+            } else if (line.startsWith("Create Player:")){
+                players.add(new Player(line.substring(line.indexOf(":") + 1), 1, 250, 25, .5, primaryWeapon, secondaryWeapon, 5, 5));
+            }
+        }
+
+        @FXML
+        private void pickLoadout(ActionEvent event){
+            String primaryWeaponName = lstPrimaryWeapon.getSelectionModel().getSelectedItem().toString();
+            String secondaryWeaponName = lstSecondaryWeapon.getSelectionModel().getSelectedItem().toString();
+            for (Weapon weapon : weapons) {
+                if (weapon.weaponName.equals(primaryWeaponName))
+                    primaryWeapon = weapon;
+                else if (weapon.weaponName.equals(secondaryWeaponName))
+                    secondaryWeapon = weapon;
+            }
+            btnReady.setDisable(true);
+            btnReady.setVisible(false);
+            numPlayersReady++;
+            player = new Player(playerName, 1, 250, 25, .5, primaryWeapon, secondaryWeapon, 5, 5);
+            players.add(player);
+            socketServer.postUpdate("Create Player:" + playerName);
+            socketServer.postUpdate("Ready" + numPlayersReady);
+            if (numPlayersReady == 2){
+                lstPrimaryWeapon.setVisible(false);
+                lstSecondaryWeapon.setVisible(false);
+                lstItems.setVisible(false);
+                scrollPane.setVisible(true);
+                txtName.setVisible(false);
+                btnEnterName.setVisible(false);
+                lblPickLoadout.setVisible(false);
+                start();
+            }
+        }
+
+        public void start(){
+            updateScreen();
+            new AnimationTimer(){
+                @Override
+                public void handle(long now) {
+                    System.out.println("now" + now);
+                    System.out.println("starttime" + startTime);
+                    if(startTime>0){
+                        System.out.println("YUHHHHHHHHHHHHHHHHHHHHHHHHH");
+                        if (now - startTime > (900000000.0 * .1)) {
+                            System.out.println("mid");
+                            if (frame < 9) {
+                                frame++;
+                            } else if (frame == 9) {
+                                frame = 1;
+                            }
+                            dragon.changeImage(buttons, frame);
+                            startTime = System.nanoTime();
+                        }
+                    }
+                }
+            }.start();
+            EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    //all button code goes here
+                    for (int i = 0; i < 50; i++) {
+                        for (int j = 0; j < 100; j++) {
+                            if (((Button) event.getSource()) == buttons[i][j]){
+//                                System.out.println("oc:"+i+"or:"+j);
+                                player.changeLoc(map, i, j);
+                                socketServer.postUpdate("PlayerMoved:" + playerName + "i:" + i + "j:" + j);
+                                startTime = System.nanoTime();
+                                System.out.println(startTime);
+                                System.out.println("end");
+                            }
+                        }
+                    }
+                }
+            };
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 4; j++) {
+//                btn[i][j].setOnMouseClicked(z);
+                    buttons[i][j].setOnMouseClicked(z);
                 }
             }
         }
+
+
 
         @Override
         public void onClosedStatus(boolean isClosed) {
@@ -347,12 +404,14 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private String playerName;
+    Player player;
 
     @FXML
     private void enterName(){
         playerName = txtName.getText();
         btnFindMatch.setVisible(true);
         btnFindMatch.setDisable(false);
+
     }
 
     private double startTime = System.nanoTime();
@@ -441,47 +500,10 @@ public class FXMLDocumentController implements Initializable {
                     buttons[i][j].setStyle("-fx-background-color: green");
                 } else if (map[i][j].num == 5){
                     buttons[i][j].setStyle("-fx-background-color: black");
+                } else if (map[i][j].num == 6){
+                    buttons[i][j].setStyle("-fx-background-color: grey");
                 }
             }
         }
-        startTime = System.nanoTime();
-        System.out.println(startTime);
-        new AnimationTimer(){
-            @Override
-            public void handle(long now) {
-                System.out.println("now" + now);
-                System.out.println("starttime" + startTime);
-                if(startTime>0){
-                    System.out.println("YUHHHHHHHHHHHHHHHHHHHHHHHHH");
-                    if (now - startTime > (900000000.0 * .1)) {
-                        System.out.println("mid");
-                        if (frame < 9) {
-                            frame++;
-                        } else if (frame == 9) {
-                            frame = 1;
-                        }
-                        dragon.changeImage(buttons, frame);
-//                        for (int i = 0; i < 3; i++) {
-//                            for (int j = 0; j < 3; j++) {
-//                                ImageView img = new ImageView();
-//                                Image tempCard;
-//                                String pathName = "src/main/resources/Images/frame" + frame + "/" + i + "" + j + ".png";
-//                                try {
-//                                    tempCard = new Image(new FileInputStream(pathName));
-//                                } catch (FileNotFoundException e) {
-//                                    throw new RuntimeException(e);
-//                                }
-//                                img.setImage(tempCard);
-//                                img.setFitHeight(50);
-//                                img.setFitWidth(50);
-//                                buttons[0][0].setGraphic(img);
-//                            }
-//                        }
-                        startTime = System.nanoTime();
-                    }
-                }
-            }
-        }.start();
-        System.out.println("end");
     }
 }

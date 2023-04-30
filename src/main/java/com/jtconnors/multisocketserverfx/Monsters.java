@@ -39,7 +39,7 @@ public class Monsters {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 img[i][j] = new ImageView();
-                img[i][j].fitWidthProperty().bind(buttons[i + 30][j + 40].widthProperty().subtract(15));
+                img[i][j].fitWidthProperty().bind(buttons[i + 30][j + 40].widthProperty().subtract(20));
                 img[i][j].fitHeightProperty().bind(buttons[i + 30][j + 40].heightProperty().subtract(15));
 //                img[i][j].setFitWidth(50);
 //                img[i][j].setFitHeight(50);

@@ -28,17 +28,16 @@ public class Player {
     Weapon primary;
     Weapon secondary;
 
-    public Player(String name, int level, int health, int healthIncrease, double speed, Weapon primary, Weapon secondary, int xLoc, int yLoc){
+    public Player(String name, int level, int health, int healthIncrease, double speed, int xLoc, int yLoc, Map[][] map){
         this.level = level;
         this.health = health;
         this.maxHealth = health;
         this.healthIncrease = healthIncrease;
         this.speed = speed;
-        this.primary = primary;
-        this.secondary = secondary;
         this.xLoc = xLoc;
         this.yLoc = yLoc;
         this.name = name;
+        map[xLoc][yLoc].num = 6;
     }
 
     public void changeHealth(int amount){

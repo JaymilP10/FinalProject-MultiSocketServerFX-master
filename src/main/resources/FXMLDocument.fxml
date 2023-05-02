@@ -14,8 +14,8 @@
       <Button fx:id="disconnectButton" layoutX="351.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleDisconnectButton" text="Leave Queue" />
       <Label fx:id="lblPort" layoutX="365.0" layoutY="360.0" text="Port:" />
       <TextField fx:id="portTextField" layoutX="394.0" layoutY="355.0" minWidth="-Infinity" prefHeight="25.0" prefWidth="48.0" text="2015" />
-      <ScrollPane fx:id="scrollPane" prefHeight="345.0" prefWidth="1000.0" visible="false">
-         <content>
+<!--      <ScrollPane fx:id="scrollPane" prefHeight="345.0" prefWidth="1000.0" visible="false">-->
+<!--         <content>-->
             <GridPane fx:id="MAP">
 <!--        <columnConstraints>-->
 <!--          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
@@ -27,8 +27,8 @@
 <!--          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
 <!--        </rowConstraints>-->
       </GridPane>
-         </content>
-      </ScrollPane>
+<!--         </content>-->
+<!--      </ScrollPane>-->
       <TextField fx:id="txtName" layoutX="300.0" layoutY="60.0" promptText="Enter Name" />
       <Button fx:id="btnEnterName" layoutX="471.0" layoutY="60.0" mnemonicParsing="false" onAction="#enterName" text="Enter" />
       <Button fx:id="btnFindMatch" layoutX="351.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleConnectButton" text="Find Match" visible="false"/>

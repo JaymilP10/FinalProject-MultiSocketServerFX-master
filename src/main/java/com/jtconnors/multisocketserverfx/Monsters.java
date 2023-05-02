@@ -39,8 +39,11 @@ public class Monsters {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 img[i][j] = new ImageView();
-                img[i][j].fitWidthProperty().bind(buttons[i + 30][j + 40].widthProperty().subtract(20));
-                img[i][j].fitHeightProperty().bind(buttons[i + 30][j + 40].heightProperty().subtract(15));
+//                img[i][j].fitWidthProperty().bind(buttons[i + 30][j + 40].widthProperty().subtract(20));
+//                img[i][j].fitHeightProperty().bind(buttons[i + 30][j + 40].heightProperty().subtract(15));
+
+                img[i][j].fitWidthProperty().bind(buttons[i + 30][j + 40].widthProperty());
+//                img[i][j].fitHeightProperty().bind(buttons[i + 30][j + 40].heightProperty());
 //                img[i][j].setFitWidth(50);
 //                img[i][j].setFitHeight(50);
             }
@@ -145,9 +148,11 @@ public class Monsters {
                     throw new RuntimeException(e);
                 }
                 img[i][j].setImage(tempCard);
-//                img[i][j].setPreserveRatio(true);
+                img[i][j].setPreserveRatio(true);
 //                img[i][j].setFitHeight(buttons[i + 30][j + 40].getPrefHeight());
 //                img[i][j].setFitWidth(buttons[i + 30][j + 40].getPrefWidth());
+//                img[i][j].setFitHeight(50);
+//                img[i][j].setFitWidth(50);
                 buttons[i + 30][j + 40].setGraphic(img[i][j]);
             }
         }

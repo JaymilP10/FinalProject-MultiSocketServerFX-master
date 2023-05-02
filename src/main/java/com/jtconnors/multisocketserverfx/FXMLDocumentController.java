@@ -64,6 +64,8 @@ public class FXMLDocumentController implements Initializable {
 
     Button[][] buttons = new Button[50][100];
 
+    Button[][] displayButtons = new Button[26][26];
+
     Map[][] map = new Map[50][100];
 
     public enum ConnectionDisplayState {
@@ -109,7 +111,7 @@ public class FXMLDocumentController implements Initializable {
                     lstPrimaryWeapon.setVisible(true);
                     lstSecondaryWeapon.setVisible(true);
                     lstItems.setVisible(true);
-                    scrollPane.setVisible(false);
+//                    scrollPane.setVisible(false);
                     Weapon LMG = new Weapon("LMG", "MachineGun", 25, 10, 100, .1);
                     Weapon RPG = new Weapon("RPG", "Rocket Launcher", 100, 400, 5, .25);
                     Weapon AR = new Weapon("AR", "Assault Rifle", 40, 50, 30, .25);
@@ -142,6 +144,48 @@ public class FXMLDocumentController implements Initializable {
 
     int frame = 0;
 
+    private String playerName;
+    Player player;
+
+    @FXML
+    private void enterName(){
+        playerName = txtName.getText();
+        btnFindMatch.setVisible(true);
+        btnFindMatch.setDisable(false);
+
+    }
+
+    @FXML
+    private void pickLoadout(ActionEvent event){
+        String primaryWeaponName = lstPrimaryWeapon.getSelectionModel().getSelectedItem().toString();
+        String secondaryWeaponName = lstSecondaryWeapon.getSelectionModel().getSelectedItem().toString();
+        for (Weapon weapon : weapons) {
+            if (weapon.weaponName.equals(primaryWeaponName))
+                primaryWeapon = weapon;
+            else if (weapon.weaponName.equals(secondaryWeaponName))
+                secondaryWeapon = weapon;
+        }
+        btnReady.setDisable(true);
+        btnReady.setVisible(false);
+        numPlayersReady++;
+        player = new Player(playerName, 1, 250, 25, .5, 5, 23, map);
+        player.primary = primaryWeapon;
+        player.secondary = secondaryWeapon;
+        updateScreen();
+        players.add(player);
+        socketServer.postUpdate("Create Player:" + playerName);
+        socketServer.postUpdate("Ready" + numPlayersReady);
+        if (numPlayersReady == 2){
+            lstPrimaryWeapon.setVisible(false);
+            lstSecondaryWeapon.setVisible(false);
+            lstItems.setVisible(false);
+//            scrollPane.setVisible(true);
+            txtName.setVisible(false);
+            btnEnterName.setVisible(false);
+            lblPickLoadout.setVisible(false);
+        }
+    }
+
     class FxSocketListener implements SocketListener {
 
         @Override
@@ -157,43 +201,16 @@ public class FXMLDocumentController implements Initializable {
                     lstPrimaryWeapon.setVisible(false);
                     lstSecondaryWeapon.setVisible(false);
                     lstItems.setVisible(false);
-                    scrollPane.setVisible(true);
+//                    scrollPane.setVisible(true);
                     txtName.setVisible(false);
                     btnEnterName.setVisible(false);
                     lblPickLoadout.setVisible(false);
                     start();
                 }
             } else if (line.startsWith("Create Player:")){
-                players.add(new Player(line.substring(line.indexOf(":") + 1), 1, 250, 25, .5, primaryWeapon, secondaryWeapon, 5, 5));
-            }
-        }
-
-        @FXML
-        private void pickLoadout(ActionEvent event){
-            String primaryWeaponName = lstPrimaryWeapon.getSelectionModel().getSelectedItem().toString();
-            String secondaryWeaponName = lstSecondaryWeapon.getSelectionModel().getSelectedItem().toString();
-            for (Weapon weapon : weapons) {
-                if (weapon.weaponName.equals(primaryWeaponName))
-                    primaryWeapon = weapon;
-                else if (weapon.weaponName.equals(secondaryWeaponName))
-                    secondaryWeapon = weapon;
-            }
-            btnReady.setDisable(true);
-            btnReady.setVisible(false);
-            numPlayersReady++;
-            player = new Player(playerName, 1, 250, 25, .5, primaryWeapon, secondaryWeapon, 5, 5);
-            players.add(player);
-            socketServer.postUpdate("Create Player:" + playerName);
-            socketServer.postUpdate("Ready" + numPlayersReady);
-            if (numPlayersReady == 2){
-                lstPrimaryWeapon.setVisible(false);
-                lstSecondaryWeapon.setVisible(false);
-                lstItems.setVisible(false);
-                scrollPane.setVisible(true);
-                txtName.setVisible(false);
-                btnEnterName.setVisible(false);
-                lblPickLoadout.setVisible(false);
-                start();
+                players.add(new Player(line.substring(line.indexOf(":") + 1), 1, 250, 25, .5, 5, 5, map));
+                players.get(players.size() - 1).primary = primaryWeapon;
+                updateScreen();
             }
         }
 
@@ -313,6 +330,16 @@ public class FXMLDocumentController implements Initializable {
         MAP.setVgap(0);
 //        MAP.setGridLinesVisible(true);
 
+        for (int i = 0; i < displayButtons.length; i++) {
+            for (int j = 0; j < displayButtons[0].length; j++) {
+                displayButtons[i][j] = new Button();
+                displayButtons[i][j].setPrefHeight(10);
+                displayButtons[i][j].setPrefWidth(10);
+                displayButtons[i][j].setMaxSize(50, 50);
+                MAP.add(displayButtons[i][j], j, i);
+            }
+        }
+
         for (int i = 0; i < buttons.length; i++) {
             for (int j = 0; j < buttons[0].length; j++) {
                 buttons[i][j] = new Button();
@@ -330,7 +357,7 @@ public class FXMLDocumentController implements Initializable {
                 } else if ((i < 10 && j >= 20 && j <= 79) || (i > 39 && j >= 20 && j <= 79)){
                     map[i][j].num = 3;
                 }
-                MAP.add(buttons[i][j], j, i);
+//                MAP.add(buttons[i][j], j, i);
             }
         }
 
@@ -401,17 +428,6 @@ public class FXMLDocumentController implements Initializable {
         }
 
         dragon = new Monsters(50, 500, 10, .25, 43, 32, buttons);
-    }
-
-    private String playerName;
-    Player player;
-
-    @FXML
-    private void enterName(){
-        playerName = txtName.getText();
-        btnFindMatch.setVisible(true);
-        btnFindMatch.setDisable(false);
-
     }
 
     private double startTime = System.nanoTime();
@@ -487,7 +503,6 @@ public class FXMLDocumentController implements Initializable {
     private GridPane MAP;
 
     private void updateScreen(){
-
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 if (map[i][j].num == 1){
@@ -505,5 +520,41 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }
+
+//        displayButtons[3][3].setStyle(buttons[player.yLoc][player.xLoc].getStyle());
+//        displayButtons[0][0].setStyle(buttons[player.yLoc - 3][player.xLoc - 3].getStyle());
+//        displayButtons[0][1].setStyle(buttons[player.yLoc - 3][player.xLoc - 2].getStyle());
+
+
+        for (int i = 0; i < displayButtons.length; i++) {
+            for (int j = 0; j < displayButtons[0].length; j++) {
+                if (player.yLoc - (displayButtons.length/2 - i) >= 0 && player.xLoc - (displayButtons.length/2 - j) >= 0){
+                    displayButtons[i][j].setStyle(buttons[player.yLoc - ((displayButtons.length / 2) - i)][player.xLoc - ((displayButtons.length / 2) - j)].getStyle());
+                }
+                if (player.yLoc - (displayButtons.length/2 - i) < 0){
+                    displayButtons[i][j].setStyle("-fx-background-color: black");
+                }
+                if (player.xLoc - (displayButtons.length/2 - j) < 0){
+                    displayButtons[i][j].setStyle("-fx-background-color: black");
+                }
+
+            }
+        }
+
+//        for (int i = 0; i < 25; i++) {
+//            for (int j = 0; j < 25; j++) {
+//                if (player.yLoc - i >= 0 && player.xLoc - j >= 0){
+//                    displayButtons[i][j].setStyle(buttons[player.yLoc - i][player.xLoc - j].getStyle());
+////                    displayButtons[i][j] = buttons[player.yLoc - i][player.xLoc - j];
+//                }
+//                if (player.yLoc - i < 0){
+//                    displayButtons[i][j].setStyle("-fx-background-color: black");
+//                }
+//                if (player.xLoc - j < 0){
+//                    displayButtons[i][j].setStyle("-fx-background-color: black");
+//                }
+//
+//            }
+//        }
     }
 }

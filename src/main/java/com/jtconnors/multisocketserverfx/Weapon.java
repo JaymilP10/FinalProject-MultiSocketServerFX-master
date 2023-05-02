@@ -26,7 +26,21 @@ public class Weapon {
     }
 
     public void fire(int x, int y, int targetX, int targetY){
-
+        int[] slope = reduceFraction(targetY - y, targetX - x);
+        
     }
 
+    public static int[] reduceFraction(int numerator, int denominator) {
+        int gcd = findGCD(numerator, denominator);
+        int[] result = {numerator/gcd, denominator/gcd};
+        return result;
+    }
+
+    public static int findGCD(int a, int b) {
+        if (b == 0) {
+            return a;
+        } else {
+            return findGCD(b, a % b);
+        }
+    }
 }

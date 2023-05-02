@@ -3,12 +3,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jtconnors.multisocketserverfx.FXMLDocumentController">
+<AnchorPane onKeyPressed="#move" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jtconnors.multisocketserverfx.FXMLDocumentController">
    <children>
       <Label fx:id="connectionsLabel" layoutX="348.0" layoutY="200.0" text="1/8 Players Found" />
       <Button fx:id="disconnectButton" layoutX="351.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleDisconnectButton" text="Leave Queue" />
@@ -31,11 +30,11 @@
 <!--      </ScrollPane>-->
       <TextField fx:id="txtName" layoutX="300.0" layoutY="60.0" promptText="Enter Name" />
       <Button fx:id="btnEnterName" layoutX="471.0" layoutY="60.0" mnemonicParsing="false" onAction="#enterName" text="Enter" />
-      <Button fx:id="btnFindMatch" layoutX="351.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleConnectButton" text="Find Match" visible="false"/>
+      <Button fx:id="btnFindMatch" layoutX="351.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleConnectButton" text="Find Match" visible="false" />
       <ListView fx:id="lstPrimaryWeapon" layoutX="27.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
       <Label fx:id="lblPickLoadout" layoutX="345.0" layoutY="35.0" text="Pick Loadout" visible="false" />
       <ListView fx:id="lstSecondaryWeapon" layoutX="281.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
       <ListView fx:id="lstItems" layoutX="538.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
-      <Button fx:id="btnReady" layoutX="369.0" layoutY="318.0" mnemonicParsing="false" onAction="#pickLoadout" text="READY" visible="false"/>
+      <Button fx:id="btnReady" layoutX="369.0" layoutY="318.0" mnemonicParsing="false" onAction="#pickLoadout" text="READY" visible="false" />
    </children>
 </AnchorPane>

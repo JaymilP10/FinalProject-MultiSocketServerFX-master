@@ -20,6 +20,8 @@ import javafx.scene.control.*;
 import com.jtconnors.socketfx.FxMultipleSocketServer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -186,6 +188,28 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    @FXML
+    private void move(KeyEvent keyEvent){
+        System.out.println("works");
+        KeyCode key = keyEvent.getCode();
+        System.out.println("Key Pressed: " + key);
+        if (keyEvent.getCode().equals(KeyCode.D)) {  // left arrow key
+            player.xLoc++;
+        }
+        else if (keyEvent.getCode().equals(KeyCode.A)) {
+            System.out.println("rk");
+            player.xLoc--;
+        }
+        else if (keyEvent.getCode().equals(KeyCode.W)) {
+            System.out.println("w");
+            player.yLoc--;
+        }
+        else if (key == KeyCode.S) {
+            player.yLoc++;
+        }
+        updateScreen();
+    }
+
     class FxSocketListener implements SocketListener {
 
         @Override
@@ -219,12 +243,8 @@ public class FXMLDocumentController implements Initializable {
             new AnimationTimer(){
                 @Override
                 public void handle(long now) {
-                    System.out.println("now" + now);
-                    System.out.println("starttime" + startTime);
                     if(startTime>0){
-                        System.out.println("YUHHHHHHHHHHHHHHHHHHHHHHHHH");
                         if (now - startTime > (900000000.0 * .1)) {
-                            System.out.println("mid");
                             if (frame < 9) {
                                 frame++;
                             } else if (frame == 9) {
@@ -236,33 +256,34 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
             }.start();
-            EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    //all button code goes here
-                    for (int i = 0; i < 50; i++) {
-                        for (int j = 0; j < 100; j++) {
-                            if (((Button) event.getSource()) == buttons[i][j]){
-//                                System.out.println("oc:"+i+"or:"+j);
-                                player.changeLoc(map, i, j);
-                                socketServer.postUpdate("PlayerMoved:" + playerName + "i:" + i + "j:" + j);
-                                startTime = System.nanoTime();
-                                System.out.println(startTime);
-                                System.out.println("end");
-                            }
-                        }
-                    }
-                }
-            };
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 4; j++) {
-//                btn[i][j].setOnMouseClicked(z);
-                    buttons[i][j].setOnMouseClicked(z);
-                }
-            }
+//            EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
+//                @Override
+//                public void handle(MouseEvent event) {
+//                    //all button code goes here
+//                    for (int i = 0; i < 50; i++) {
+//                        fooor (int j = 0; j < 100; j++) {
+//                            if (((Button) event.getSource()) == buttons[i][j]){
+////                                System.out.println("oc:"+i+"or:"+j);
+//                                player.changeLoc(map, i, j);
+//                                socketServer.postUpdate("PlayerMoved:" + playerName + "i:" + i + "j:" + j);
+//                                startTime = System.nanoTime();
+//                                System.out.println(startTime);
+//                                System.out.println("end");
+//                            }
+//                        }
+//                    }
+//                }
+//            };
+//            for (int i = 0; i < 5; i++) {
+//                for (int j = 0; j < 4; j++) {
+////                btn[i][j].setOnMouseClicked(z);
+//                    buttons[i][j].setOnMouseClicked(z);
+//                }
+//            }
+
+
+
         }
-
-
 
         @Override
         public void onClosedStatus(boolean isClosed) {
@@ -333,8 +354,8 @@ public class FXMLDocumentController implements Initializable {
         for (int i = 0; i < displayButtons.length; i++) {
             for (int j = 0; j < displayButtons[0].length; j++) {
                 displayButtons[i][j] = new Button();
-                displayButtons[i][j].setPrefHeight(10);
-                displayButtons[i][j].setPrefWidth(10);
+                displayButtons[i][j].setPrefHeight(25);
+                displayButtons[i][j].setPrefWidth(25);
                 displayButtons[i][j].setMaxSize(50, 50);
                 MAP.add(displayButtons[i][j], j, i);
             }
@@ -503,39 +524,104 @@ public class FXMLDocumentController implements Initializable {
     private GridPane MAP;
 
     private void updateScreen(){
+
+//        for (int i = 10; i <= 39; i++) {
+//            for (int j = 45; j < 55; j++) {
+//                map[i][j].num = 1;
+//            }
+//        }
+//
+//        int x = 10;
+//        for (int i = 30; i <= 39; i++) {
+//            for (int k = 0; k <= 9; k++) {
+////                map[i + k][j] = new Map(i + k, j, 3, false);
+////                map[i - k][j] = new Map(i - k, j, 3, false);
+//                map[i + k][x].num = 3;
+//                map[i - k][x].num = 3;
+//                map[i][x + k].num = 3;
+//                map[i][x - k].num = 3;
+////                map[i + k][j].isWall = false;
+////                map[i - k][j].isWall = false;
+//            }
+//            x++;
+//        }
+//
+//        int j = 89;
+//        for (int i = 20; i >= 10; i--) {
+//            for (int k = 0; k <= 9; k++) {
+////                map[i + k][j] = new Map(i + k, j, 3, false);
+////                map[i - k][j] = new Map(i - k, j, 3, false);
+//                map[i + k][j].num = 3;
+//                map[i - k][j].num = 3;
+//                map[i][j + k].num = 3;
+//                map[i][j - k].num = 3;
+////                map[i + k][j].isWall = false;
+////                map[i - k][j].isWall = false;
+//            }
+//            j--;
+//        }
+//
+//        int y = 89;
+//        for (int i = 30; i <= 39; i++) {
+//            for (int k = 0; k <= 9; k++) {
+////                map[i + k][j] = new Map(i + k, j, 3, false);
+////                map[i - k][j] = new Map(i - k, j, 3, false);
+//                map[i + k][y].num = 3;
+//                map[i - k][y].num = 3;
+//                map[i][y + k].num = 3;
+//                map[i][y - k].num = 3;
+////                map[i + k][j].isWall = false;
+////                map[i - k][j].isWall = false;
+//            }
+//            y--;
+//        }
+//
+//        int z = 10;
+//        for (int i = 20; i >= 10; i--) {
+//            for (int k = 0; k <= 9; k++) {
+////                map[i + k][j] = new Map(i + k, j, 3, false);
+////                map[i - k][j] = new Map(i - k, j, 3, false);
+//                map[i + k][z].num = 3;
+//                map[i - k][z].num = 3;
+//                map[i][z + k].num = 3;
+//                map[i][z - k].num = 3;
+////                map[i + k][j].isWall = false;
+////                map[i - k][j].isWall = false;
+//            }
+//            z++;
+//        }
+
+        map[player.yLoc][player.xLoc].num = 6;
+
         for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j].num == 1){
-                    buttons[i][j].setStyle("-fx-background-color: blue");
-                } else if (map[i][j].num == 2){
-                    buttons[i][j].setStyle("-fx-background-color: red");
-                } else if (map[i][j].num == 3){
-                    buttons[i][j].setStyle("-fx-background-color: yellow");
-                } else if (map[i][j].num == 4){
-                    buttons[i][j].setStyle("-fx-background-color: green");
-                } else if (map[i][j].num == 5){
-                    buttons[i][j].setStyle("-fx-background-color: black");
-                } else if (map[i][j].num == 6){
-                    buttons[i][j].setStyle("-fx-background-color: grey");
+            for (int c = 0; c < map[0].length; c++) {
+                if (map[i][c].num == 1){
+                    buttons[i][c].setStyle("-fx-background-color: blue");
+                } else if (map[i][c].num == 2){
+                    buttons[i][c].setStyle("-fx-background-color: red");
+                } else if (map[i][c].num == 3){
+                    buttons[i][c].setStyle("-fx-background-color: yellow");
+                } else if (map[i][c].num == 4){
+                    buttons[i][c].setStyle("-fx-background-color: green");
+                } else if (map[i][c].num == 5){
+                    buttons[i][c].setStyle("-fx-background-color: black");
+                } else if (map[i][c].num == 6){
+                    buttons[i][c].setStyle("-fx-background-color: grey");
                 }
             }
         }
 
-//        displayButtons[3][3].setStyle(buttons[player.yLoc][player.xLoc].getStyle());
-//        displayButtons[0][0].setStyle(buttons[player.yLoc - 3][player.xLoc - 3].getStyle());
-//        displayButtons[0][1].setStyle(buttons[player.yLoc - 3][player.xLoc - 2].getStyle());
-
 
         for (int i = 0; i < displayButtons.length; i++) {
-            for (int j = 0; j < displayButtons[0].length; j++) {
-                if (player.yLoc - (displayButtons.length/2 - i) >= 0 && player.xLoc - (displayButtons.length/2 - j) >= 0){
-                    displayButtons[i][j].setStyle(buttons[player.yLoc - ((displayButtons.length / 2) - i)][player.xLoc - ((displayButtons.length / 2) - j)].getStyle());
+            for (int k = 0; k < displayButtons[0].length; k++) {
+                if (player.yLoc - (displayButtons.length/2 - i) >= 0 && player.xLoc - (displayButtons.length/2 - k) >= 0){
+                    displayButtons[i][k].setStyle(buttons[player.yLoc - ((displayButtons.length / 2) - i)][player.xLoc - ((displayButtons.length / 2) - k)].getStyle());
                 }
                 if (player.yLoc - (displayButtons.length/2 - i) < 0){
-                    displayButtons[i][j].setStyle("-fx-background-color: black");
+                    displayButtons[i][k].setStyle("-fx-background-color: black");
                 }
-                if (player.xLoc - (displayButtons.length/2 - j) < 0){
-                    displayButtons[i][j].setStyle("-fx-background-color: black");
+                if (player.xLoc - (displayButtons.length/2 - k) < 0){
+                    displayButtons[i][k].setStyle("-fx-background-color: black");
                 }
 
             }

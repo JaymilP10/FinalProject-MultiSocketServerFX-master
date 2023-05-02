@@ -37,7 +37,7 @@ public class Player {
         this.xLoc = xLoc;
         this.yLoc = yLoc;
         this.name = name;
-        map[xLoc][yLoc].num = 6;
+        map[yLoc][xLoc].num = 6;
     }
 
     public void changeHealth(int amount){

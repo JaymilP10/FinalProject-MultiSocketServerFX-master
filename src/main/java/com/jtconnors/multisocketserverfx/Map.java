@@ -7,6 +7,9 @@ public class Map {
     int x;
     int y;
     int num;
+
+    public Map(){}
+
     
     public Map(int x, int y, int num, boolean isWall){
         this.x = x;

@@ -1,7 +1,10 @@
 package com.jtconnors.multisocketserverfx;
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+
+import java.math.BigInteger;
 
 public class Weapon {
 
@@ -42,32 +45,112 @@ class Bullets extends Weapon{
         this.x = x;
         this.y = y;
     }
-    public void fire(int targetX, int targetY, Button[][] buttons, Map[][] map){
+    public void fire(int targetX, int targetY, Button[][] buttons, Map[][] map, AnimationTimer animationTimer){
+        if (y > 0 && y < 50 && x > 0 && x < 100)
+            map[y][x].newNum = map[y][x].Orignum;
         System.out.println("called fire");
         System.out.println(squaresTravelled);
         System.out.println("ty:" + targetY + " tx:" + targetX + " y:" + y + " x:" + x);
-        int[] slope = reduceFraction(targetY - y, x - targetX);
+        int[] slope = new int[2];
         squaresTravelled++;
-        x += slope[1];
-        y += slope[0];
+
+        if (targetY == y && targetX > x){
+            x++;
+        } else if (targetY == y && targetX < x){
+            x--;
+        } else if (targetX == x && targetY > y){
+            y++;
+        } else if (targetX == x && targetY < y){
+            y--;
+        } else if (targetY > y && targetY - y == slope[0]){
+            y += 1;
+        } else if (targetY < y && targetY - y == slope[0]){
+            y -= 1;
+        } else if (targetY > y && targetX > x){
+            slope = reduceFraction(targetY - y, targetX - x);
+            y += slope[0];
+            x += slope[1];
+        } else if (targetY > y && targetX < x){
+            slope = reduceFraction(targetY - y, targetX - x);
+            y += slope[0];
+            x -= slope[1];
+        } else if (targetY < y && targetX > x){
+            slope = reduceFraction(targetY - y, targetX - x);
+            y -= slope[0];
+            x += slope[1];
+        } else if (targetY < y && targetX < x){
+            slope = reduceFraction(targetY - y, targetX - x);
+            y -= slope[0];
+            x -= slope[1];
+        }
+
+//        if (targetX > x && targetX - x == slope[1]){
+//            x += 1;
+//        } else if (targetX < x && targetX - x == slope[1]){
+//            x -= 1;
+//        }
+
+        if (squaresTravelled >= 50){
+            animationTimer.stop();
+        }
+        if (map[y][x].newNum == 8){
+            animationTimer.stop();
+        }
+
+//        else if (targetX > x) {
+//            slope = reduceFraction(targetY - y, targetX - x);
+//            x += slope[1];
+//        } else {
+//            slope = reduceFraction(targetY - y, targetX - x);
+//            x -= slope[1];
+//        }
+//        x += slope[1];
+//        y += slope[0];
 //        x += findGCD(y - targetY, targetX - x);
 //        y -= findGCD(y - targetY, targetX - x);
 
-        if (x < 100 && y < 50){
-            buttons[x][y].setStyle("-fx-background-color: brown");
-            map[x][y].newNum = 7;
+        if (x < 100 && y < 50 && x > 0 && y > 0){
+//            buttons[x][y].setStyle("-fx-background-color: brown");
+            map[y][x].newNum = 7;
         }
     }
 
     public static int[] reduceFraction(int numerator, int denominator) {
         System.out.println("nume: " + numerator + " deno:" + denominator);
+
+//        int n = numerator;
+//        int d = denominator;
+//        int x = Math.max(n, d);
+//        if (n == d){
+//            x = 1;
+//        }
+//
+//        for (int i = 1; i < x; i++) {
+//            if (n % i == 0 && d % i == 0){
+//                n/=i;
+//                d/=i;
+//                i = 1;
+//            }
+//        }
+//
+//        System.out.println("n:" + n + " d:" + d);
+//
+//        int[] result = {n, d};
+
+        int[] result = new int[2];
+
         int gcd = findGCD(numerator, denominator);
+        System.out.println("GCD: " + gcd);
         if (gcd == 1){
-            return new int[]{1, 1};
+//            gcd = findGCD(numerator - 1, denominator);
+            return new int[] {1, 1};
         } else if (gcd == -1){
-            return new int[]{-1, -1};
+            gcd = findGCD(numerator - 1, denominator);
+        } else if (gcd == 0){
+            return result;
         }
-        int[] result = {numerator/gcd, denominator/gcd};
+        result[0] = numerator/gcd;
+        result[1] = numerator/gcd;
         return result;
     }
 
@@ -81,23 +164,27 @@ class Bullets extends Weapon{
 
     public static int findGCD(int x, int y)
     {
-        int r = 0, a, b;
-        a = Math.max(x, y); // a is greater number
-        b = Math.min(x, y); // b is smaller number
-        r = b;
-//        if (a == b)
-//            r = 1;
+        BigInteger n = new BigInteger(String.valueOf(x));
+        BigInteger d = new BigInteger(String.valueOf(y));
 
-        while(a % b != 0) {
-            r = a % b;
-            a = b;
-            b = r;
-        }
-        if (r == 0){
-            return 1;
-        }
-        System.out.println("r:" + r);
-        return r;
+        return Integer.parseInt(String.valueOf(n.gcd(d)));
+//        int r = 0, a, b;
+//        a = Math.max(x, y); // a is greater number
+//        b = Math.min(x, y); // b is smaller number
+//        r = b;
+////        if (a == b)
+////            r = 1;
+//
+//        while(a % b != 0) {
+//            r = a % b;
+//            a = b;
+//            b = r;
+//        }
+//        if (r == 0){
+//            return 1;
+//        }
+//        System.out.println("r:" + r);
+//        return r;
     }
 }
 

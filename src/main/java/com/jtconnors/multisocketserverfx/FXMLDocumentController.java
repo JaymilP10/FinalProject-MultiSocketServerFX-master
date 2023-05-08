@@ -205,7 +205,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.xLoc++;
         }
-        else if (keyEvent.getCode().equals(KeyCode.A) && player.xLoc > 0 && player.xLoc - 1 > 0) {
+        else if (keyEvent.getCode().equals(KeyCode.A) && player.xLoc > 0 && player.xLoc - 1 > 1) {
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
@@ -213,7 +213,7 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("rk");
             player.xLoc--;
         }
-        else if (keyEvent.getCode().equals(KeyCode.W) && player.yLoc > 0 && player.yLoc - 1 > 0) {
+        else if (keyEvent.getCode().equals(KeyCode.W) && player.yLoc > 0 && player.yLoc - 1 > 1) {
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
@@ -227,21 +227,21 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc++;
-        } else if (key == KeyCode.Q && player.yLoc > 0 && player.xLoc > 0 && player.yLoc - 1 > 0 && player.xLoc - 1 > 0){
+        } else if (key == KeyCode.Q && player.yLoc > 0 && player.xLoc > 0 && player.yLoc - 1 > 1 && player.xLoc - 1 > 1){
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc--;
             player.xLoc--;
-        } else if (key == KeyCode.E && player.yLoc > 0 && player.xLoc < 99 && player.yLoc - 1 > 0){
+        } else if (key == KeyCode.E && player.yLoc > 0 && player.xLoc < 99 && player.yLoc - 1 > 1){
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc--;
             player.xLoc++;
-        } else if (key == KeyCode.Z && player.yLoc < 99 && player.xLoc > 0 && player.xLoc - 1 > 0){
+        } else if (key == KeyCode.Z && player.yLoc < 99 && player.xLoc > 0 && player.xLoc - 1 > 1){
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
@@ -513,8 +513,9 @@ public class FXMLDocumentController implements Initializable {
 //                                        System.out.println("in animation timer");
                                         if (currentlyUsingWeapon.startTime > 0){
 //                                            System.out.println("lollolololol");
-                                            if (now - currentlyUsingWeapon.startTime > (900000000.0 * currentlyUsingWeapon.speed) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
-                                                bullet.fire(colTo, rowTo, buttons, map);
+                                            if (now - currentlyUsingWeapon.startTime > (900000000.0 * 2) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
+                                                System.out.println("range: " + currentlyUsingWeapon.range);
+                                                bullet.fire(colTo, rowTo, buttons, map, this);
                                                 updateScreen();
                                                 bullet.startTime = System.nanoTime();
                                             } else {

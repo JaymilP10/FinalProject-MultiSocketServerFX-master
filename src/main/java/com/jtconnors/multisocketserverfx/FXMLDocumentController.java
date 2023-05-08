@@ -128,11 +128,9 @@ public class FXMLDocumentController implements Initializable {
                     lstPrimaryWeapon.getItems().add(AR.weaponName);
                     lstSecondaryWeapon.getItems().add(RPG.weaponName);
                     lstSecondaryWeapon.getItems().add(Sniper.weaponName);
-                    socketServer.postUpdate("Update Screen");
 //                    connectionsSB.append("s");
                 }
 //                connectionsLabel.setText(new String(connectionsSB));
-
                 break;
         }
     }
@@ -189,6 +187,7 @@ public class FXMLDocumentController implements Initializable {
             txtName.setVisible(false);
             btnEnterName.setVisible(false);
             lblPickLoadout.setVisible(false);
+            MAP.setVisible(true);
             start();
         }
     }

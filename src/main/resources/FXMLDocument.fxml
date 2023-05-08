@@ -15,7 +15,7 @@
       <TextField fx:id="portTextField" layoutX="394.0" layoutY="355.0" minWidth="-Infinity" prefHeight="25.0" prefWidth="48.0" text="2015" />
 <!--      <ScrollPane fx:id="scrollPane" prefHeight="345.0" prefWidth="1000.0" visible="false">-->
 <!--         <content>-->
-            <GridPane fx:id="MAP" layoutX="160.0" layoutY="50.0">
+            <GridPane fx:id="MAP" layoutX="160.0" layoutY="50.0" visible="false">
 <!--        <columnConstraints>-->
 <!--          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
 <!--          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->

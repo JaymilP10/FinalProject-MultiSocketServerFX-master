@@ -140,7 +140,6 @@ public class Monsters {
 //        buttons[0][0].setGraphic(img[0][0]);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                System.out.println("IS CALLING CHANGE IMAGE METHODDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 String pathName = "src/main/resources/Images/frame" + frameNum + "/" + j + "" + i + ".png";
                 try {
                     FileInputStream fileInputStream = new FileInputStream(pathName);

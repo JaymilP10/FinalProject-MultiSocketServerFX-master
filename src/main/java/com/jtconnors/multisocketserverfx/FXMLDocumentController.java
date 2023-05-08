@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -139,6 +140,7 @@ public class FXMLDocumentController implements Initializable {
     ArrayList<Weapon> weapons = new ArrayList<>();
     Weapon primaryWeapon = new Weapon();
     Weapon secondaryWeapon = new Weapon();
+    Weapon currentlyUsingWeapon = new Weapon();
     int numPlayersReady = 0;
 
     ArrayList<Player> players = new ArrayList<>();
@@ -168,6 +170,7 @@ public class FXMLDocumentController implements Initializable {
             else if (weapon.weaponName.equals(secondaryWeaponName))
                 secondaryWeapon = weapon;
         }
+        currentlyUsingWeapon = primaryWeapon;
         btnReady.setDisable(true);
         btnReady.setVisible(false);
         numPlayersReady++;
@@ -196,31 +199,67 @@ public class FXMLDocumentController implements Initializable {
         KeyCode key = keyEvent.getCode();
         System.out.println("Key Pressed: " + key);
         if (keyEvent.getCode().equals(KeyCode.D) && player.xLoc < 99) {  // left arrow key
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.xLoc++;
         }
-        else if (keyEvent.getCode().equals(KeyCode.A) && player.xLoc > 0) {
+        else if (keyEvent.getCode().equals(KeyCode.A) && player.xLoc > 0 && player.xLoc - 1 > 0) {
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             System.out.println("rk");
             player.xLoc--;
         }
-        else if (keyEvent.getCode().equals(KeyCode.W) && player.yLoc > 0) {
+        else if (keyEvent.getCode().equals(KeyCode.W) && player.yLoc > 0 && player.yLoc - 1 > 0) {
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             System.out.println("w");
             player.yLoc--;
         }
         else if (key == KeyCode.S && player.yLoc < 49) {
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc++;
-        } else if (key == KeyCode.Q && player.yLoc > 0 && player.xLoc > 0){
+        } else if (key == KeyCode.Q && player.yLoc > 0 && player.xLoc > 0 && player.yLoc - 1 > 0 && player.xLoc - 1 > 0){
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc--;
             player.xLoc--;
-        } else if (key == KeyCode.E && player.yLoc > 0 && player.xLoc < 99){
+        } else if (key == KeyCode.E && player.yLoc > 0 && player.xLoc < 99 && player.yLoc - 1 > 0){
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc--;
             player.xLoc++;
-        } else if (key == KeyCode.Z && player.yLoc < 99 && player.xLoc > 0){
+        } else if (key == KeyCode.Z && player.yLoc < 99 && player.xLoc > 0 && player.xLoc - 1 > 0){
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc++;
             player.xLoc--;
         } else if (key == KeyCode.C && player.yLoc < 49 && player.xLoc < 99){
+            map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+            map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+            map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+            map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc++;
             player.xLoc++;
         }
+        map[player.yLoc - 1][player.xLoc - 1].newNum = 6;
+        map[player.yLoc - 1][player.xLoc].newNum = 6;
+        map[player.yLoc][player.xLoc - 1].newNum = 6;
+        map[player.yLoc][player.xLoc].newNum = 6;
         updateScreen();
     }
 
@@ -327,11 +366,14 @@ public class FXMLDocumentController implements Initializable {
                 map[i][j] = new Map(i, j, 4, false);
 
                 if (i > 20 && i < 30 && j < 10){
-                    map[i][j].num = 1;
+                    map[i][j].Orignum = 1;
+                    map[i][j].newNum = 1;
                 } else if (i > 20 && i < 30 && j > 89){
-                    map[i][j].num = 2;
+                    map[i][j].Orignum = 2;
+                    map[i][j].newNum = 2;
                 } else if ((i < 10 && j >= 20 && j <= 79) || (i > 39 && j >= 20 && j <= 79)){
-                    map[i][j].num = 3;
+                    map[i][j].Orignum = 3;
+                    map[i][j].newNum = 3;
                 }
 //                MAP.add(buttons[i][j], j, i);
             }
@@ -339,7 +381,8 @@ public class FXMLDocumentController implements Initializable {
 
         for (int i = 10; i <= 39; i++) {
             for (int j = 45; j < 55; j++) {
-                map[i][j].num = 1;
+                map[i][j].Orignum = 1;
+                map[i][j].newNum = 1;
             }
         }
 
@@ -348,10 +391,14 @@ public class FXMLDocumentController implements Initializable {
             for (int k = 0; k <= 9; k++) {
 //                map[i + k][j] = new Map(i + k, j, 3, false);
 //                map[i - k][j] = new Map(i - k, j, 3, false);
-                map[i + k][x].num = 3;
-                map[i - k][x].num = 3;
-                map[i][x + k].num = 3;
-                map[i][x - k].num = 3;
+                map[i + k][x].Orignum = 3;
+                map[i + k][x].newNum = 3;
+                map[i - k][x].Orignum = 3;
+                map[i - k][x].newNum = 3;
+                map[i][x + k].Orignum = 3;
+                map[i][x + k].newNum = 3;
+                map[i][x - k].Orignum = 3;
+                map[i][x - k].newNum = 3;
 //                map[i + k][j].isWall = false;
 //                map[i - k][j].isWall = false;
             }
@@ -363,10 +410,14 @@ public class FXMLDocumentController implements Initializable {
             for (int k = 0; k <= 9; k++) {
 //                map[i + k][j] = new Map(i + k, j, 3, false);
 //                map[i - k][j] = new Map(i - k, j, 3, false);
-                map[i + k][j].num = 3;
-                map[i - k][j].num = 3;
-                map[i][j + k].num = 3;
-                map[i][j - k].num = 3;
+                map[i + k][j].Orignum = 3;
+                map[i + k][j].newNum = 3;
+                map[i - k][j].Orignum = 3;
+                map[i - k][j].newNum = 3;
+                map[i][j + k].Orignum = 3;
+                map[i][j + k].newNum = 3;
+                map[i][j - k].Orignum = 3;
+                map[i][j - k].newNum = 3;
 //                map[i + k][j].isWall = false;
 //                map[i - k][j].isWall = false;
             }
@@ -378,10 +429,14 @@ public class FXMLDocumentController implements Initializable {
             for (int k = 0; k <= 9; k++) {
 //                map[i + k][j] = new Map(i + k, j, 3, false);
 //                map[i - k][j] = new Map(i - k, j, 3, false);
-                map[i + k][y].num = 3;
-                map[i - k][y].num = 3;
-                map[i][y + k].num = 3;
-                map[i][y - k].num = 3;
+                map[i + k][y].Orignum = 3;
+                map[i + k][y].newNum = 3;
+                map[i - k][y].Orignum = 3;
+                map[i - k][y].newNum = 3;
+                map[i][y + k].Orignum = 3;
+                map[i][y + k].newNum = 3;
+                map[i][y - k].Orignum = 3;
+                map[i][y - k].newNum = 3;
 //                map[i + k][j].isWall = false;
 //                map[i - k][j].isWall = false;
             }
@@ -393,10 +448,14 @@ public class FXMLDocumentController implements Initializable {
             for (int k = 0; k <= 9; k++) {
 //                map[i + k][j] = new Map(i + k, j, 3, false);
 //                map[i - k][j] = new Map(i - k, j, 3, false);
-                map[i + k][z].num = 3;
-                map[i - k][z].num = 3;
-                map[i][z + k].num = 3;
-                map[i][z - k].num = 3;
+                map[i + k][z].Orignum = 3;
+                map[i + k][z].newNum = 3;
+                map[i - k][z].Orignum = 3;
+                map[i - k][z].newNum = 3;
+                map[i][z + k].Orignum = 3;
+                map[i][z + k].newNum = 3;
+                map[i][z - k].Orignum = 3;
+                map[i][z - k].newNum = 3;
 //                map[i + k][j].isWall = false;
 //                map[i - k][j].isWall = false;
             }
@@ -414,7 +473,7 @@ public class FXMLDocumentController implements Initializable {
             public void handle(long now) {
                 if(startTime>0){
                     if (now - startTime > (900000000.0 * .1)) {
-                        System.out.println("ANIMATION TIMER IS WORKING");
+//                        System.out.println("ANIMATION TIMER IS WORKING");
                         if (frame < 9) {
                             frame++;
                         } else if (frame == 9) {
@@ -426,12 +485,67 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }.start();
+
+        System.out.println("here");
+
+        EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("clicked something");
+                if (event.getButton() == MouseButton.PRIMARY){
+                    System.out.println("clicked primary");
+                    Bullets bullet = new Bullets(player.xLoc, player.yLoc);
+                    currentlyUsingWeapon.squaresTravelled = 0;
+                    for (int i = 0; i < 26; i++) {
+                        for (int j = 0; j < 26; j++) {
+                            if (((Button) event.getSource()) == displayButtons[i][j]){
+//                                int rowTo = player.yLoc + (i - (player.yLoc + 13));
+//                                int colTo = player.xLoc + (j - (player.xLoc + 13));
+
+                                int rowTo = player.yLoc + (i - 13);
+                                int colTo = player.xLoc + (j - 13);
+
+//                                int finalJ = j;
+//                                int finalI = i;
+                                new AnimationTimer(){
+                                    @Override
+                                    public void handle(long now) {
+//                                        System.out.println("in animation timer");
+                                        if (currentlyUsingWeapon.startTime > 0){
+//                                            System.out.println("lollolololol");
+                                            if (now - currentlyUsingWeapon.startTime > (900000000.0 * currentlyUsingWeapon.speed) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
+                                                bullet.fire(colTo, rowTo, buttons, map);
+                                                updateScreen();
+                                                bullet.startTime = System.nanoTime();
+                                            } else {
+                                                this.stop();
+                                            }
+                                        }
+                                    }
+                                }.start();
+                                System.out.println(i + " " + j);
+//                            System.out.println("oc:"+i+"or:"+j);
+
+                            }
+                        }
+                    }
+                } else if (event.getButton() == MouseButton.SECONDARY){
+                    System.out.println("clicked secondary");
+                }
+            }
+        };
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+//                btn[i][j].setOnMouseClicked(z);
+                displayButtons[i][j].setOnMouseClicked(z);
+            }
+        }
 //            EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
 //                @Override
 //                public void handle(MouseEvent event) {
 //                    //all button code goes here
 //                    for (int i = 0; i < 50; i++) {
-//                        fooor (int j = 0; j < 100; j++) {
+//                        for (int j = 0; j < 100; j++) {
 //                            if (((Button) event.getSource()) == buttons[i][j]){
 ////                                System.out.println("oc:"+i+"or:"+j);
 //                                player.changeLoc(map, i, j);
@@ -455,33 +569,39 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    private double startTime = System.nanoTime();
-    private void inGame(ActionEvent event){
-        EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //all button code goes here
-                for (int i = 0; i < 5; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        if (((Button) event.getSource()) == buttons[i][j]){
-//                            System.out.println("oc:"+i+"or:"+j);
-                            startTime = System.nanoTime();
-                            new AnimationTimer(){
-                                @Override
-                                public void handle(long now) {
-                                    if(startTime>0){
-                                        if (now - startTime > (900000000.0 * 2)){
-                                            this.stop();
-                                        }
-                                    }
-                                }
-                            }.start();
-                        }
-                    }
-                }
-            }
-        };
+    private void fire(MouseEvent event){
+
+
     }
+
+
+    private double startTime = System.nanoTime();
+//    private void inGame(ActionEvent event){
+//        EventHandler<MouseEvent> z = new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                //all button code goes here
+//                for (int i = 0; i < 5; i++) {
+//                    for (int j = 0; j < 4; j++) {
+//                        if (((Button) event.getSource()) == buttons[i][j]){
+////                            System.out.println("oc:"+i+"or:"+j);
+//                            startTime = System.nanoTime();
+//                            new AnimationTimer(){
+//                                @Override
+//                                public void handle(long now) {
+//                                    if(startTime>0){
+//                                        if (now - startTime > (900000000.0 * 2)){
+//                                            this.stop();
+//                                        }
+//                                    }
+//                                }
+//                            }.start();
+//                        }
+//                    }
+//                }
+//            }
+//        };
+//    }
 
     @FXML
     private void handleClearRcvdMsgsButton(ActionEvent event) {
@@ -529,136 +649,88 @@ public class FXMLDocumentController implements Initializable {
 
     private void updateScreen(){
 
-        for (int i = 0; i < buttons.length; i++) {
-            for (int j = 0; j < buttons[0].length; j++) {
-                map[i][j].num = 4;
-                if (i > 20 && i < 30 && j < 10){
-                    map[i][j].num = 1;
-                } else if (i > 20 && i < 30 && j > 89){
-                    map[i][j].num = 2;
-                } else if ((i < 10 && j >= 20 && j <= 79) || (i > 39 && i < 49 && j >= 20 && j <= 79)){
-                    map[i][j].num = 3;
-                }
-            }
-        }
-
-        for (int i = 10; i <= 39; i++) {
-            for (int j = 45; j < 55; j++) {
-                map[i][j].num = 1;
-            }
-        }
-
-        int x = 10;
-        for (int i = 30; i <= 39; i++) {
-            for (int k = 0; k <= 9; k++) {
-                map[i + k][x].num = 3;
-                map[i - k][x].num = 3;
-                map[i][x + k].num = 3;
-                map[i][x - k].num = 3;
-            }
-            x++;
-        }
-
-        int j = 89;
-        for (int i = 20; i >= 10; i--) {
-            for (int k = 0; k <= 9; k++) {
-                map[i + k][j].num = 3;
-                map[i - k][j].num = 3;
-                map[i][j + k].num = 3;
-                map[i][j - k].num = 3;
-            }
-            j--;
-        }
-
-        int y = 89;
-        for (int i = 30; i <= 39; i++) {
-            for (int k = 0; k <= 9; k++) {
-                map[i + k][y].num = 3;
-                map[i - k][y].num = 3;
-                map[i][y + k].num = 3;
-                map[i][y - k].num = 3;
-            }
-            y--;
-        }
-
-        int z = 10;
-        for (int i = 20; i >= 10; i--) {
-            for (int k = 0; k <= 9; k++) {
-                map[i + k][z].num = 3;
-                map[i - k][z].num = 3;
-                map[i][z + k].num = 3;
-                map[i][z - k].num = 3;
-            }
-            z++;
-        }
-
-        map[player.yLoc - 1][player.xLoc - 1].num = 6;
-        map[player.yLoc - 1][player.xLoc].num = 6;
-        map[player.yLoc][player.xLoc - 1].num = 6;
-        map[player.yLoc][player.xLoc].num = 6;
+//        for (int i = 0; i < buttons.length; i++) {
+//            for (int j = 0; j < buttons[0].length; j++) {
+//                map[i][j].num = 4;
+//                if (i > 20 && i < 30 && j < 10){
+//                    map[i][j].num = 1;
+//                } else if (i > 20 && i < 30 && j > 89){
+//                    map[i][j].num = 2;
+//                } else if ((i < 10 && j >= 20 && j <= 79) || (i > 39 && i < 49 && j >= 20 && j <= 79)){
+//                    map[i][j].num = 3;
+//                }
+//            }
+//        }
+//
+//        for (int i = 10; i <= 39; i++) {
+//            for (int j = 45; j < 55; j++) {
+//                map[i][j].num = 1;
+//            }
+//        }
+//
+//        int x = 10;
+//        for (int i = 30; i <= 39; i++) {
+//            for (int k = 0; k <= 9; k++) {
+//                map[i + k][x].num = 3;
+//                map[i - k][x].num = 3;
+//                map[i][x + k].num = 3;
+//                map[i][x - k].num = 3;
+//            }
+//            x++;
+//        }
+//
+//        int j = 89;
+//        for (int i = 20; i >= 10; i--) {
+//            for (int k = 0; k <= 9; k++) {
+//                map[i + k][j].num = 3;
+//                map[i - k][j].num = 3;
+//                map[i][j + k].num = 3;
+//                map[i][j - k].num = 3;
+//            }
+//            j--;
+//        }
+//
+//        int y = 89;
+//        for (int i = 30; i <= 39; i++) {
+//            for (int k = 0; k <= 9; k++) {
+//                map[i + k][y].num = 3;
+//                map[i - k][y].num = 3;
+//                map[i][y + k].num = 3;
+//                map[i][y - k].num = 3;
+//            }
+//            y--;
+//        }
+//
+//        int z = 10;
+//        for (int i = 20; i >= 10; i--) {
+//            for (int k = 0; k <= 9; k++) {
+//                map[i + k][z].num = 3;
+//                map[i - k][z].num = 3;
+//                map[i][z + k].num = 3;
+//                map[i][z - k].num = 3;
+//            }
+//            z++;
+//        }
 
         for (int i = 0; i < map.length; i++) {
             for (int c = 0; c < map[0].length; c++) {
-                if (map[i][c].num == 1){
+                if (map[i][c].newNum == 1){
                     buttons[i][c].setStyle("-fx-background-color: blue");
-                } else if (map[i][c].num == 2){
+                } else if (map[i][c].newNum == 2){
                     buttons[i][c].setStyle("-fx-background-color: red");
-                } else if (map[i][c].num == 3){
+                } else if (map[i][c].newNum == 3){
                     buttons[i][c].setStyle("-fx-background-color: yellow");
-                } else if (map[i][c].num == 4){
+                } else if (map[i][c].newNum == 4){
                     buttons[i][c].setStyle("-fx-background-color: green");
-                } else if (map[i][c].num == 5){
+                } else if (map[i][c].newNum == 5){
                     buttons[i][c].setStyle("-fx-background-color: black");
-                } else if (map[i][c].num == 6){
+                } else if (map[i][c].newNum == 6){
                     buttons[i][c].setStyle("-fx-background-color: grey");
+                } else if (map[i][c].newNum == 7){
+                    buttons[i][c].setStyle("-fx-background-color: brown");
                 }
             }
         }
-
-
-//        for (int i = 0; i < displayButtons.length; i++) {
-//            for (int k = 0; k < displayButtons[0].length; k++) {
-//                if (player.yLoc - (displayButtons.length/2 - i) >= 0 && player.xLoc - (displayButtons.length/2 - k) >= 0 && player.yLoc + (displayButtons.length/2 - i) <= 49 && player.xLoc + (displayButtons.length/2 - k) <= 99){
-////                    displayButtons[displayButtons.length/2 + i][displayButtons.length/2 + k].setStyle(buttons[player.yLoc + ((displayButtons.length / 2) - i)][player.xLoc + ((displayButtons.length / 2) - k)].getStyle());
-//                    displayButtons[i][k].setStyle(buttons[player.yLoc - ((displayButtons.length / 2) - i)][player.xLoc - ((displayButtons.length / 2) - k)].getStyle());
-////                    displayButtons[i][k].setStyle(buttons[player.yLoc + ((displayButtons.length / 2) - i)][player.xLoc + ((displayButtons.length / 2) - k)].getStyle());
-//                    displayButtons[i][k].setGraphic(buttons[player.yLoc - ((displayButtons.length / 2) - i)][player.xLoc - ((displayButtons.length / 2) - k)].getGraphic());
-//                }
-//                if (player.yLoc + (displayButtons.length/2 - i) < 49 && player.xLoc + (displayButtons.length/2 - k) < 99){
-//                }
-//                if (player.yLoc - (displayButtons.length/2 - i) < 0){
-//                    displayButtons[i][k].setStyle("-fx-background-color: black");
-//                }
-//                if (player.xLoc - (displayButtons.length/2 - k) < 0){
-//                    displayButtons[i][k].setStyle("-fx-background-color: black");
-//                }
-//
-////                if (player.yLoc - (displayButtons.length/2 - i) < 0){
-////                    displayButtons[i][k].setStyle("-fx-background-color: black");
-////                }
-////                if (player.xLoc - (displayButtons.length/2 - k) < 0){
-////                    displayButtons[i][k].setStyle("-fx-background-color: black");
-////                }z
-//
-//                if (player.yLoc + (displayButtons.length/2 - i) > 49){
-//                    displayButtons[i + 13][k].setStyle("-fx-background-color: black");
-//                }
-//                if (player.xLoc + (displayButtons.length/2 - k) > 99){
-//                    displayButtons[i][k + 13].setStyle("-fx-background-color: black");
-//                }
-//            }
-//        }
-
-//        for (int i = 0; i < displayButtons.length; i++) {
-//            for (int k = 0; k < displayButtons[0].length; k++) {
-//                if (player.yLoc - i >= 0 && player.xLoc - k >= 0 && player.yLoc + i <= 49 && player.xLoc + k <= 99){
-////                    displayButtons[displayButtons.length/2 + i][displayButtons.length/2 + k].setStyle(buttons[player.yLoc + ((displayButtons.length / 2) - i)][player.xLoc + ((displayButtons.length / 2) - k)].getStyle());
-//                    displayButtons[i][k].setStyle(buttons[player.yLoc - i][player.xLoc - k].getStyle());
-//                    displayButtons[i][k].setStyle(buttons[player.yLoc + i][player.xLoc + k].getStyle());
-//                    displayButtons[i][k].setGraphic(buttons[player.yLoc - i][player.xLoc - k].getGraphic());
-//                }
-//            }
-//        }
 
         for (int i = 0; i < 13; i++) {
             for (int k = 0; k < 13; k++) {

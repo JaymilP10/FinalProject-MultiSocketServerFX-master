@@ -37,7 +37,10 @@ public class Player {
         this.xLoc = xLoc;
         this.yLoc = yLoc;
         this.name = name;
-        map[yLoc][xLoc].num = 6;
+        map[yLoc][xLoc].newNum = 6;
+        map[yLoc - 1][xLoc].newNum = 6;
+        map[yLoc][xLoc - 1].newNum = 6;
+        map[yLoc - 1][xLoc - 1].newNum = 6;
     }
 
     public void changeHealth(int amount){
@@ -60,33 +63,33 @@ public class Player {
                         if (now - startTime > (900000000.0 * speed)) {
                             int tempx = xLoc;
                             int tempy = yLoc;
-                            if (targetY > tempy && targetX > tempx && map[tempx + 1][tempy + 1].num != 5){
+                            if (targetY > tempy && targetX > tempx && map[tempx + 1][tempy + 1].newNum != 5){
                                 tempy++;
                                 tempx++;
-                            } else if (targetY == tempy && targetX > tempx && map[tempx + 1][tempy].num != 5) {
+                            } else if (targetY == tempy && targetX > tempx && map[tempx + 1][tempy].newNum != 5) {
                                 tempx++;
-                            } else if (targetY < tempy && targetX > tempx && map[tempx + 1][tempy - 1].num != 5) {
+                            } else if (targetY < tempy && targetX > tempx && map[tempx + 1][tempy - 1].newNum != 5) {
                                 tempy--;
                                 tempx++;
-                            } else if (targetY < tempy && targetX < tempx && map[tempx - 1][tempy - 1].num != 5) {
+                            } else if (targetY < tempy && targetX < tempx && map[tempx - 1][tempy - 1].newNum != 5) {
                                 tempy--;
                                 tempx--;
-                            } else if (targetY < tempy && targetX == tempx && map[tempx][tempy - 1].num != 5) {
+                            } else if (targetY < tempy && targetX == tempx && map[tempx][tempy - 1].newNum != 5) {
                                 tempy--;
-                            } else if (targetY > tempy && targetX == tempx && map[tempx][tempy + 1].num != 5) {
+                            } else if (targetY > tempy && targetX == tempx && map[tempx][tempy + 1].newNum != 5) {
                                 tempy++;
-                            } else if (targetY == tempy && targetX < tempx && map[tempx - 1][tempy].num != 5) {
+                            } else if (targetY == tempy && targetX < tempx && map[tempx - 1][tempy].newNum != 5) {
                                 tempx--;
-                            } else if (targetY > tempy && targetX < tempx && map[tempx - 1][tempy + 1].num != 5) {
+                            } else if (targetY > tempy && targetX < tempx && map[tempx - 1][tempy + 1].newNum != 5) {
                                 tempy++;
                                 tempx--;
                             }
 
                             if (tempy == targetY && tempx == targetX) {
-                                map[tempx][tempy].num = 6;
+                                map[tempx][tempy].newNum = 6;
                             } else {
-                                map[tempx][tempy].num = 6;
-                                map[xLoc][yLoc].num = 0;
+                                map[tempx][tempy].newNum = 6;
+                                map[xLoc][yLoc].newNum = 0;
                                 xLoc = tempx;
                                 yLoc = tempy;
                             }
@@ -133,14 +136,14 @@ public class Player {
         this.secondary = secondary;
     }
 
-    public void changeImage(Button[][] buttons, int frameNum){
+    public void changeImage(Button[][] buttons, int framenewNum){
         ImageView img = new ImageView();
         Image tempCard;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 for (int k = 30; k < 33; k++) {
                     for (int l = 42; l < 45; l++) {
-                        String pathName = "src/main/resources/Images/frame" + frameNum + "/" + i + "" + j + ".png";
+                        String pathName = "src/main/resources/Images/frame" + framenewNum + "/" + i + "" + j + ".png";
                         try {
                             tempCard = new Image(new FileInputStream(pathName));
                         } catch (FileNotFoundException e) {

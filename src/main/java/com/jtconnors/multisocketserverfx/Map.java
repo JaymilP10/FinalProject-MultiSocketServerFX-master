@@ -6,7 +6,8 @@ public class Map {
     boolean isWall = false;
     int x;
     int y;
-    int num;
+    int Orignum;
+    int newNum;
 
     public Map(){}
 
@@ -14,11 +15,12 @@ public class Map {
     public Map(int x, int y, int num, boolean isWall){
         this.x = x;
         this.y = y;
-        this.num = num;
+        this.Orignum = num;
+        this.newNum = Orignum;
         this.isWall = isWall;
     }
 
     public void changeNum(int num){
-        this.num = num;
+        this.newNum = num;
     }
 }

@@ -197,12 +197,14 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("works");
         KeyCode key = keyEvent.getCode();
         System.out.println("Key Pressed: " + key);
+//        if (keyEvent.getCode().equals(KeyCode.D) || keyEvent.getCode().equals(KeyCode.A) || keyEvent.getCode().equals(KeyCode.W) || key  == KeyCode.S || key == KeyCode.Q)
         if (keyEvent.getCode().equals(KeyCode.D) && player.xLoc < 99) {  // left arrow key
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.xLoc++;
+            socketServer.postUpdate("Move Player Right:" + playerName);
         }
         else if (keyEvent.getCode().equals(KeyCode.A) && player.xLoc > 0 && player.xLoc - 1 > 1) {
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
@@ -211,6 +213,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             System.out.println("rk");
             player.xLoc--;
+            socketServer.postUpdate("Move Player Left:" + playerName);
         }
         else if (keyEvent.getCode().equals(KeyCode.W) && player.yLoc > 0 && player.yLoc - 1 > 1) {
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
@@ -219,6 +222,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             System.out.println("w");
             player.yLoc--;
+            socketServer.postUpdate("Move Player Upp:" + playerName);
         }
         else if (key == KeyCode.S && player.yLoc < 49) {
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
@@ -226,6 +230,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc++;
+            socketServer.postUpdate("Move Player Downn:" + playerName);
         } else if (key == KeyCode.Q && player.yLoc > 0 && player.xLoc > 0 && player.yLoc - 1 > 1 && player.xLoc - 1 > 1){
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
@@ -233,6 +238,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc--;
             player.xLoc--;
+            socketServer.postUpdate("Move Player Up-left:" + playerName);
         } else if (key == KeyCode.E && player.yLoc > 0 && player.xLoc < 99 && player.yLoc - 1 > 1){
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
@@ -240,6 +246,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc--;
             player.xLoc++;
+            socketServer.postUpdate("Move Player Up-right:" + playerName);
         } else if (key == KeyCode.Z && player.yLoc < 99 && player.xLoc > 0 && player.xLoc - 1 > 1){
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
@@ -247,6 +254,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc++;
             player.xLoc--;
+            socketServer.postUpdate("Move Player Down-left:" + playerName);
         } else if (key == KeyCode.C && player.yLoc < 49 && player.xLoc < 99){
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
@@ -254,50 +262,13 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
             player.yLoc++;
             player.xLoc++;
+            socketServer.postUpdate("Move Player Down-right:" + playerName);
         }
         map[player.yLoc - 1][player.xLoc - 1].newNum = 6;
         map[player.yLoc - 1][player.xLoc].newNum = 6;
         map[player.yLoc][player.xLoc - 1].newNum = 6;
         map[player.yLoc][player.xLoc].newNum = 6;
         updateScreen();
-    }
-
-    class FxSocketListener implements SocketListener {
-
-        @Override
-        public void onMessage(String line) {
-//            if (line != null && !line.equals("")) {
-//                rcvdMsgsData.add(line);
-//            } else
-            if (line.startsWith("Ready")){
-                numPlayersReady++;
-                socketServer.postUpdate("Ready" + numPlayersReady);
-                if (numPlayersReady == 2){
-                    btnReady.setVisible(false);
-                    lstPrimaryWeapon.setVisible(false);
-                    lstSecondaryWeapon.setVisible(false);
-                    lstItems.setVisible(false);
-//                    scrollPane.setVisible(true);
-                    txtName.setVisible(false);
-                    btnEnterName.setVisible(false);
-                    lblPickLoadout.setVisible(false);
-                    start();
-                }
-            } else if (line.startsWith("Create Player:")){
-                players.add(new Player(line.substring(line.indexOf(":") + 1), 1, 250, 25, .5, 5, 5, map));
-                players.get(players.size() - 1).primary = primaryWeapon;
-//                updateScreen();
-            }
-        }
-
-        @Override
-        public void onClosedStatus(boolean isClosed) {
-            if (socketServer.isServerSocketClosed()) {
-                displayState(ConnectionDisplayState.DISCONNECTED);
-            } else {
-                displayState(ConnectionDisplayState.CONNECTED);
-            }
-        }
     }
 
     @Override
@@ -503,6 +474,8 @@ public class FXMLDocumentController implements Initializable {
 
                                 int rowTo = player.yLoc + (i - 13);
                                 int colTo = player.xLoc + (j - 13);
+
+                                socketServer.postUpdate("Player shot:" + playerName + "r:" + rowTo + "c:" + colTo);
 
 //                                int finalJ = j;
 //                                int finalI = i;
@@ -712,6 +685,13 @@ public class FXMLDocumentController implements Initializable {
 //            z++;
 //        }
 
+        for (Player player : players) {
+            map[player.yLoc][player.xLoc].newNum = 6;
+            map[player.yLoc - 1][player.xLoc - 1].newNum = 6;
+            map[player.yLoc - 1][player.xLoc].newNum = 6;
+            map[player.yLoc][player.xLoc - 1].newNum = 6;
+        }
+
         for (int i = 0; i < map.length; i++) {
             for (int c = 0; c < map[0].length; c++) {
                 if (map[i][c].newNum == 1){
@@ -773,6 +753,157 @@ public class FXMLDocumentController implements Initializable {
                 } else {
                     displayButtons[i + 13][k].setStyle("-fx-background-color: black");
                 }
+            }
+        }
+    }
+
+    class FxSocketListener implements SocketListener {
+
+        @Override
+        public void onMessage(String line) {
+//            if (line != null && !line.equals("")) {
+//                rcvdMsgsData.add(line);
+//            } else
+            if (line.startsWith("Ready")){
+                numPlayersReady++;
+                socketServer.postUpdate("Ready" + numPlayersReady);
+                if (numPlayersReady == 2){
+                    btnReady.setVisible(false);
+                    lstPrimaryWeapon.setVisible(false);
+                    lstSecondaryWeapon.setVisible(false);
+                    lstItems.setVisible(false);
+//                    scrollPane.setVisible(true);
+                    txtName.setVisible(false);
+                    btnEnterName.setVisible(false);
+                    lblPickLoadout.setVisible(false);
+                    start();
+                }
+            } else if (line.startsWith("Create Player:")){
+                players.add(new Player(line.substring(line.indexOf(":") + 1), 1, 250, 25, .5, 5, 23, map));
+//                players.get(players.size() - 1).primary = primaryWeapon;
+//                updateScreen();
+            } else if (line.startsWith("Move Player Left:")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.xLoc--;
+                    }
+                }
+            } else if (line.startsWith("Move Player Right:")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.xLoc++;
+                    }
+                }
+            } else if (line.startsWith("Move Player Downn")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.yLoc++;
+                    }
+                }
+            } else if (line.startsWith("Move Player Upp")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.yLoc--;
+                    }
+                }
+            } else if (line.startsWith("Move Player Down-right")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.yLoc++;
+                        player.xLoc++;
+                    }
+                }
+            } else if (line.startsWith("Move Player Down-left")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.yLoc++;
+                        player.xLoc--;
+                    }
+                }
+            } else if (line.startsWith("Move Player Up-right")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.yLoc--;
+                        player.xLoc++;
+                    }
+                }
+            } else if (line.startsWith("Move Player Up-left")){
+                for (Player player : players) {
+                    if (player.name.equals(line.substring(line.indexOf(":") + 1))){
+                        map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
+                        map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
+                        map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
+                        map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
+                        player.yLoc--;
+                        player.xLoc--;
+                    }
+                }
+            } else if (line.startsWith("Player shot")){
+                int rowTo = Integer.parseInt(line.substring(line.indexOf("r:") + 2, line.indexOf("c")));
+                int colTo = Integer.parseInt(line.substring(line.indexOf("c:") + 2));
+                String playerName = line.substring(line.indexOf("shot:") + 5, line.indexOf("r:"));
+
+                for (Player player : players) {
+                    if (player.name.equals(playerName)){
+                        Bullets bullet = new Bullets(player.xLoc, player.yLoc);
+                        new AnimationTimer(){
+                            @Override
+                            public void handle(long now) {
+//                                        System.out.println("in animation timer");
+                                if (currentlyUsingWeapon.startTime > 0){
+//                                            System.out.println("lollolololol");
+                                    if (now - currentlyUsingWeapon.startTime > (900000000.0 * 2) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
+                                        System.out.println("range: " + currentlyUsingWeapon.range);
+                                        bullet.fire(colTo, rowTo, buttons, map, this);
+                                        updateScreen();
+                                        bullet.startTime = System.nanoTime();
+                                    } else {
+                                        this.stop();
+                                    }
+                                }
+                            }
+                        }.start();
+                    }
+                }
+            }
+            updateScreen();
+            updateScreen();
+        }
+
+        @Override
+        public void onClosedStatus(boolean isClosed) {
+            if (socketServer.isServerSocketClosed()) {
+                displayState(ConnectionDisplayState.DISCONNECTED);
+            } else {
+                displayState(ConnectionDisplayState.CONNECTED);
             }
         }
     }

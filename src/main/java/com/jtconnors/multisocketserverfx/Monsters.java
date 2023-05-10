@@ -22,19 +22,23 @@ public class Monsters {
     int xLoc;
     int yLoc;
     int range;
+    double startTime;
+    int respawnTime;
 
     ProgressBar healthBar = new ProgressBar(1);
 
     Weapon primary;
     Weapon secondary;
 
-    public Monsters(int range, int health, int healthIncrease, double speed, int xLoc, int yLoc, Button[][] buttons){
+    public Monsters(int range, int health, int healthIncrease, double speed, int xLoc, int yLoc, Button[][] buttons, int respawnTime){
         this.range = range;
         this.health = health;
         this.maxHealth = health;
         this.healthIncrease = healthIncrease;
         this.xLoc = xLoc;
         this.yLoc = yLoc;
+        this.respawnTime = respawnTime;
+        startTime = System.nanoTime();
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

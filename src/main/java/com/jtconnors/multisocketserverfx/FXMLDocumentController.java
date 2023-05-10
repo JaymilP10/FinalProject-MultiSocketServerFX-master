@@ -142,6 +142,8 @@ public class FXMLDocumentController implements Initializable {
     int numPlayersReady = 0;
 
     ArrayList<Player> players = new ArrayList<>();
+    ArrayList<Turrets> turrets = new ArrayList<>();
+    ArrayList<Monsters> monsters = new ArrayList<>();
 
     Monsters dragon;
 
@@ -194,9 +196,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void move(KeyEvent keyEvent){
-        System.out.println("works");
+//        System.out.println("works");
         KeyCode key = keyEvent.getCode();
-        System.out.println("Key Pressed: " + key);
+//        System.out.println("Key Pressed: " + key);
 //        if (keyEvent.getCode().equals(KeyCode.D) || keyEvent.getCode().equals(KeyCode.A) || keyEvent.getCode().equals(KeyCode.W) || key  == KeyCode.S || key == KeyCode.Q)
         if (keyEvent.getCode().equals(KeyCode.D) && player.xLoc < 99) {  // left arrow key
             map[player.yLoc - 1][player.xLoc - 1].newNum = map[player.yLoc - 1][player.xLoc - 1].Orignum;
@@ -211,7 +213,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
-            System.out.println("rk");
+//            System.out.println("rk");
             player.xLoc--;
             socketServer.postUpdate("Move Player Left:" + playerName);
         }
@@ -220,7 +222,7 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc - 1][player.xLoc].newNum = map[player.yLoc - 1][player.xLoc].Orignum;
             map[player.yLoc][player.xLoc - 1].newNum = map[player.yLoc][player.xLoc - 1].Orignum;
             map[player.yLoc][player.xLoc].newNum = map[player.yLoc][player.xLoc].Orignum;
-            System.out.println("w");
+//            System.out.println("w");
             player.yLoc--;
             socketServer.postUpdate("Move Player Upp:" + playerName);
         }
@@ -432,7 +434,8 @@ public class FXMLDocumentController implements Initializable {
             z++;
         }
 
-        dragon = new Monsters(50, 500, 10, .25, 43, 32, buttons);
+        dragon = new Monsters(50, 500, 10, .25, 43, 32, buttons, 10);
+        monsters.add(dragon);
     }
 
     public void start(){
@@ -442,15 +445,30 @@ public class FXMLDocumentController implements Initializable {
             @Override
             public void handle(long now) {
                 if(startTime>0){
-                    if (now - startTime > (900000000.0 * .1)) {
+                    for (Turrets turret : turrets) {
+                        if (turret.range - player.xLoc > 0 && turret.range - player.yLoc > 0){
+                            if (now - turret.startTime > (900000000.0 * .1)) {
 //                        System.out.println("ANIMATION TIMER IS WORKING");
-                        if (frame < 9) {
-                            frame++;
-                        } else if (frame == 9) {
-                            frame = 1;
+                                turret.shoot(player.xLoc, player.yLoc, map);
+                                turret.startTime = System.nanoTime();
+                            }
                         }
-                        dragon.changeImage(buttons, frame);
-                        startTime = System.nanoTime();
+                    }
+                    for (Monsters monster : monsters) {
+                        if (now - startTime > (900000000.0 * monster.respawnTime)) {
+                        System.out.println("ANIMATION TIMER IS WORKING");
+                            if (now - monster.startTime > (900000000.0 * .1)){
+                                System.out.println("inside second animation timer");
+                                if (frame < 9) {
+                                    frame++;
+                                } else if (frame == 9) {
+                                    frame = 1;
+                                }
+                                dragon.changeImage(buttons, frame);
+                                monster.startTime = System.nanoTime();
+                            }
+                            startTime = System.nanoTime();
+                        }
                     }
                 }
             }
@@ -487,7 +505,7 @@ public class FXMLDocumentController implements Initializable {
 //                                            System.out.println("lollolololol");
                                             if (now - currentlyUsingWeapon.startTime > (900000000.0 * 2) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
                                                 System.out.println("range: " + currentlyUsingWeapon.range);
-                                                bullet.fire(colTo, rowTo, buttons, map, this);
+                                                bullet.fire(colTo, rowTo, map, this);
                                                 updateScreen();
                                                 bullet.startTime = System.nanoTime();
                                             } else {
@@ -882,7 +900,7 @@ public class FXMLDocumentController implements Initializable {
 //                                            System.out.println("lollolololol");
                                     if (now - currentlyUsingWeapon.startTime > (900000000.0 * 2) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
                                         System.out.println("range: " + currentlyUsingWeapon.range);
-                                        bullet.fire(colTo, rowTo, buttons, map, this);
+                                        bullet.fire(colTo, rowTo, map, this);
                                         updateScreen();
                                         bullet.startTime = System.nanoTime();
                                     } else {
@@ -894,7 +912,6 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
             }
-            updateScreen();
             updateScreen();
         }
 

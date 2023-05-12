@@ -139,10 +139,26 @@ public class FXMLDocumentController implements Initializable {
     Weapon primaryWeapon = new Weapon();
     Weapon secondaryWeapon = new Weapon();
     Weapon currentlyUsingWeapon = new Weapon();
+
+    ArrayList<Turrets> blueTurrets = new ArrayList<>();
+    Turrets blueTopFrontTurret;
+    Turrets blueTopMidTurret;
+    Turrets blueTopInhibitorTurret;
+    Turrets blueBotFrontTurret;
+    Turrets blueBotMidTurret;
+    Turrets blueBotInhibitorTurret;
+
+    ArrayList<Turrets> redTurrets = new ArrayList<>();
+    Turrets redTopFrontTurret;
+    Turrets redTopMidTurret;
+    Turrets redTopInhibitorTurret;
+    Turrets redBotFrontTurret;
+    Turrets redBotMidTurret;
+    Turrets redBotInhibitorTurret;
+
     int numPlayersReady = 0;
 
     ArrayList<Player> players = new ArrayList<>();
-    ArrayList<Turrets> turrets = new ArrayList<>();
     ArrayList<Monsters> monsters = new ArrayList<>();
 
     Monsters dragon;
@@ -436,6 +452,31 @@ public class FXMLDocumentController implements Initializable {
 
         dragon = new Monsters(50, 500, 10, .25, 43, 32, buttons, 10);
         monsters.add(dragon);
+        blueBotFrontTurret = new Turrets("blueBotFrontTurret", 5000, 100, 5, map);
+        blueBotMidTurret = new Turrets("blueBotMidTurret", 5000, 100, 5, map);
+        blueBotInhibitorTurret = new Turrets("blueBotInhibitorTurret", 5000, 100, 5, map);
+        blueTopFrontTurret = new Turrets("blueTopFrontTurret", 5000, 100, 5, map);
+        blueTopMidTurret = new Turrets("blueTopMidTurret", 5000, 100, 5, map);
+        blueTopInhibitorTurret = new Turrets("blueTopInhibitorTurret", 5000, 100, 5, map);
+        blueTurrets.add(blueTopFrontTurret);
+        blueTurrets.add(blueTopMidTurret);
+        blueTurrets.add(blueTopInhibitorTurret);
+        blueTurrets.add(blueBotFrontTurret);
+        blueTurrets.add(blueBotMidTurret);
+        blueTurrets.add(blueBotInhibitorTurret);
+
+        redBotFrontTurret = new Turrets("redBotFrontTurret", 5000, 100, 5, map);
+        redBotMidTurret = new Turrets("redBotMidTurret", 5000, 100, 5, map);
+        redBotInhibitorTurret = new Turrets("redBotInhibitorTurret", 5000, 100, 5, map);
+        redTopFrontTurret = new Turrets("redTopFrontTurret", 5000, 100, 5, map);
+        redTopMidTurret = new Turrets("redTopMidTurret", 5000, 100, 5, map);
+        redTopInhibitorTurret = new Turrets("redTopInhibitorTurret", 5000, 100, 5, map);
+        redTurrets.add(blueTopFrontTurret);
+        redTurrets.add(blueTopMidTurret);
+        redTurrets.add(blueTopInhibitorTurret);
+        redTurrets.add(blueBotFrontTurret);
+        redTurrets.add(blueBotMidTurret);
+        redTurrets.add(blueBotInhibitorTurret);
     }
 
     public void start(){
@@ -443,11 +484,11 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("called start");
         new AnimationTimer(){
             @Override
-            public void handle(long now) {
+            public void handle(long noww) {
                 if(startTime>0){
-                    for (Turrets turret : turrets) {
+                    for (Turrets turret : redTurrets) {
                         if (turret.range - player.xLoc > 0 && turret.range - player.yLoc > 0){
-                            if (now - turret.startTime > (900000000.0 * .1)) {
+                            if (noww - turret.startTime > (900000000.0 * .1)) {
 //                        System.out.println("ANIMATION TIMER IS WORKING");
                                 turret.shoot(player.xLoc, player.yLoc, map);
                                 turret.startTime = System.nanoTime();
@@ -455,20 +496,28 @@ public class FXMLDocumentController implements Initializable {
                         }
                     }
                     for (Monsters monster : monsters) {
-                        if (now - startTime > (900000000.0 * monster.respawnTime)) {
-                        System.out.println("ANIMATION TIMER IS WORKING");
-                            if (now - monster.startTime > (900000000.0 * .1)){
-                                System.out.println("inside second animation timer");
-                                if (frame < 9) {
-                                    frame++;
-                                } else if (frame == 9) {
-                                    frame = 1;
+                        new AnimationTimer(){
+                            @Override
+                            public void handle(long now){
+                                if (noww - startTime > (900000000.0 * monster.respawnTime)) {
+//                        if (now - startTime > (900000000.0 * .1)) {
+//                                    System.out.println("ANIMATION TIMER IS WORKING");
+                                    if (now - monster.startTime > (900000000.0 * .1)){
+                                        System.out.println("inside second animation timer");
+                                        if (frame < 9) {
+                                            frame++;
+                                        } else if (frame == 9) {
+                                            frame = 1;
+                                        }
+                                        dragon.changeImage(buttons, frame);
+                                        monster.startTime = System.nanoTime();
+                                    }
+                                    startTime = System.nanoTime();
+                                } else {
+                                    this.stop();
                                 }
-                                dragon.changeImage(buttons, frame);
-                                monster.startTime = System.nanoTime();
                             }
-                            startTime = System.nanoTime();
-                        }
+                        }.start();
                     }
                 }
             }
@@ -710,6 +759,32 @@ public class FXMLDocumentController implements Initializable {
             map[player.yLoc][player.xLoc - 1].newNum = 6;
         }
 
+        for (Turrets turret : blueTurrets) {
+            if (!turret.isDestroyed){
+                map[turret.turretY][turret.turretX].newNum = 1;
+                map[turret.turretY - 1][turret.turretX - 1].newNum = 1;
+                map[turret.turretY - 1][turret.turretX].newNum = 1;
+                map[turret.turretY - 1][turret.turretX + 1].newNum = 1;
+                map[turret.turretY + 1][turret.turretX - 1].newNum = 1;
+                map[turret.turretY + 1][turret.turretX].newNum = 1;
+                map[turret.turretY + 1][turret.turretX + 1].newNum = 1;
+                map[turret.turretY][turret.turretX - 1].newNum = 1;
+                map[turret.turretY][turret.turretX + 1].newNum = 1;
+            }
+        }
+
+        for (Turrets turret : redTurrets) {
+            map[turret.turretY][turret.turretX].newNum = 2;
+            map[turret.turretY - 1][turret.turretX - 1].newNum = 2;
+            map[turret.turretY - 1][turret.turretX].newNum = 2;
+            map[turret.turretY - 1][turret.turretX + 1].newNum = 2;
+            map[turret.turretY + 1][turret.turretX - 1].newNum = 2;
+            map[turret.turretY + 1][turret.turretX].newNum = 2;
+            map[turret.turretY + 1][turret.turretX + 1].newNum = 2;
+            map[turret.turretY][turret.turretX - 1].newNum = 2;
+            map[turret.turretY][turret.turretX + 1].newNum = 2;
+        }
+
         for (int i = 0; i < map.length; i++) {
             for (int c = 0; c < map[0].length; c++) {
                 if (map[i][c].newNum == 1){
@@ -723,9 +798,11 @@ public class FXMLDocumentController implements Initializable {
                 } else if (map[i][c].newNum == 5){
                     buttons[i][c].setStyle("-fx-background-color: black");
                 } else if (map[i][c].newNum == 6){
-                    buttons[i][c].setStyle("-fx-background-color: grey");
+                    buttons[i][c].setStyle("-fx-background-color: lightblue");
                 } else if (map[i][c].newNum == 7){
                     buttons[i][c].setStyle("-fx-background-color: brown");
+                } else if (map[i][c].newNum == 8){
+                    buttons[i][c].setStyle("-fx-background-color: grey");
                 }
             }
         }

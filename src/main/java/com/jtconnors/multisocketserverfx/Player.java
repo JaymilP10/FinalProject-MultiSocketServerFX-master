@@ -27,6 +27,7 @@ public class Player {
 
     Weapon primary;
     Weapon secondary;
+    Weapon currentlyUsingWeapon;
 
     public Player(String name, int level, int health, int healthIncrease, double speed, int xLoc, int yLoc, Map[][] map){
         this.level = level;

@@ -40,18 +40,19 @@ class Bullets extends Weapon{
     int x;
     int y;
     double startTime;
+    int[] slope = new int[2];
 
     public Bullets(int x, int y){
         this.x = x;
         this.y = y;
     }
-    public void fire(int targetX, int targetY, Map[][] map, AnimationTimer animationTimer){
+    public void fire(int targetX, int targetY, Map[][] map, AnimationTimer animationTimer, Weapon weapon){
         if (y > 0 && y < 50 && x > 0 && x < 100)
             map[y][x].newNum = map[y][x].Orignum;
-        System.out.println("called fire");
+//        System.out.println("called fire");
         System.out.println(squaresTravelled);
-        System.out.println("ty:" + targetY + " tx:" + targetX + " y:" + y + " x:" + x);
-        int[] slope = new int[2];
+//        System.out.println("ty:" + targetY + " tx:" + targetX + " y:" + y + " x:" + x);
+//        int[] slope = new int[2];
         squaresTravelled++;
 
         if (targetY == y && targetX > x){
@@ -71,7 +72,7 @@ class Bullets extends Weapon{
             y += slope[0];
             x += slope[1];
         } else if (targetY > y && targetX < x){
-            slope = reduceFraction(targetY - y, targetX - x);
+            slope = reduceFraction(targetY - y, x - targetX);
             y += slope[0];
             x -= slope[1];
         } else if (targetY < y && targetX > x){
@@ -79,7 +80,7 @@ class Bullets extends Weapon{
             y -= slope[0];
             x += slope[1];
         } else if (targetY < y && targetX < x){
-            slope = reduceFraction(y - targetY, targetX - x);
+            slope = reduceFraction(y - targetY, x - targetX);
             y -= slope[0];
             x -= slope[1];
         }
@@ -90,10 +91,12 @@ class Bullets extends Weapon{
 //            x -= 1;
 //        }
 
-        if (squaresTravelled >= 50){
+        if (squaresTravelled >= weapon.range){
+            System.out.println("is out of range");
             animationTimer.stop();
         }
-        if (map[y][x].newNum == 8){
+        if (map[y][x].newNum == 8 || map[y][x].Orignum == 5){
+            System.out.println("adslfjas;dljkfa;lsdjfk;alksdjfa;ldksjfa;sdlkfja;sdlkfjalkdsj");
             animationTimer.stop();
         }
 
@@ -150,7 +153,7 @@ class Bullets extends Weapon{
             return result;
         }
         result[0] = numerator/gcd;
-        result[1] = numerator/gcd;
+        result[1] = denominator/gcd;
         return result;
     }
 

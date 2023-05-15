@@ -1021,6 +1021,7 @@ public class FXMLDocumentController implements Initializable {
                                                 bullet.startTime = System.nanoTime();
                                             }
                                         }
+                                        pbPlayerHealth.setProgress(player.healthBar.getProgress());
                                     }
                                 }.start();
 //                                System.out.println(i + " " + j);
@@ -1330,13 +1331,13 @@ public class FXMLDocumentController implements Initializable {
 
                 for (Player player : players) {
                     System.out.println(player.name);
-                    System.out.println(player.currentlyUsingWeapon.weaponName);
+//                    System.out.println(player.currentlyUsingWeapon.weaponName);
                     if (player.name.equals(playerName)){
                         Bullets bullet = new Bullets(player.xLoc, player.yLoc);
                         new AnimationTimer(){
                             @Override
                             public void handle(long now) {
-                                        System.out.println("in animation timer");
+                                System.out.println("in animation timer");
                                 if (player.currentlyUsingWeapon.startTime > 0){
 //                                            System.out.println("lollolololol");
                                     if (now - player.currentlyUsingWeapon.startTime > (900000000.0 * 2) && player.currentlyUsingWeapon.squaresTravelled < player.currentlyUsingWeapon.range){
@@ -1358,13 +1359,13 @@ public class FXMLDocumentController implements Initializable {
                 }
 //                System.out.println(line);
                 String playerName = line.substring(line.indexOf("s:") + 2, line.indexOf("primary"));
-//                System.out.println(playerName);
+                System.out.println(playerName);
                 String primaryWeapon = line.substring(line.indexOf("y:") + 2, line.indexOf("secondary:"));
-//                System.out.println(primaryWeapon);
+                System.out.println(primaryWeapon);
                 String secondaryWeapon = line.substring(line.indexOf("dary:") + 5, line.indexOf("cu"));
-//                System.out.println(secondaryWeapon);
+                System.out.println(secondaryWeapon);
                 String current = line.substring(line.indexOf("current:") + 8);
-//                System.out.println(current);
+                System.out.println(current);
                 for (Player player : players) {
                     if (player.name.equals(playerName)){
 //                        System.out.println(playerName);
@@ -1383,12 +1384,12 @@ public class FXMLDocumentController implements Initializable {
                 }
                 for (Player player : players) {
                     if (player.name.equals(playerName)){
-//                        System.out.println(player.currentlyUsingWeapon.weaponName);
+                        System.out.println(player.currentlyUsingWeapon.weaponName);
                     }
                 }
 
                 socketServer.postUpdate(line);
-            } else if (line.startsWith("Grednade:")){
+            } else if (line.startsWith("Grenade:")){
                 String playerName = line.substring(line.indexOf(":") + 1, line.indexOf("r:") + 2);
                 int rowTo = Integer.parseInt(line.substring(line.indexOf("r:") + 2, line.indexOf("c:")));
                 int colTo = Integer.parseInt(line.substring(line.indexOf("c:") + 2));

@@ -220,7 +220,9 @@ class Bullets extends Weapon{
 
         for (Turrets turret : blue) {
             if (thisPlayer.team.equals("red")){
+                System.out.println("code is running");
                 if ((y == turret.turretY && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX - 1) || (y == turret.turretY && x == turret.turretX - 1)){
+                    System.out.println("HIt turret");
                     turret.health -= thisPlayer.currentlyUsingWeapon.damage;
                     if (turret.health <= 0){
                         thisPlayer.gold += 200;
@@ -232,7 +234,9 @@ class Bullets extends Weapon{
 
         for (Turrets turret : red) {
             if (thisPlayer.team.equals("blue")){
+                System.out.println("blue code running");
                 if ((y == turret.turretY && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX - 1) || (y == turret.turretY && x == turret.turretX - 1)){
+                    System.out.println("checked collisions");
                     turret.health -= thisPlayer.currentlyUsingWeapon.damage;
                     if (turret.health <= 0){
                         thisPlayer.gold += 200;

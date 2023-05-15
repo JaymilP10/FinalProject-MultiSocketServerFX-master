@@ -1351,9 +1351,9 @@ public class FXMLDocumentController implements Initializable {
                                 System.out.println("in animation timer");
                                 if (player.primary.startTime > 0){
 //                                            System.out.println("lollolololol");
-                                    if (now - player.currentlyUsingWeapon.startTime > (900000000.0 * 2) && player.currentlyUsingWeapon.squaresTravelled < player.currentlyUsingWeapon.range){
+                                    if (now - player.primary.startTime > (900000000.0 * 2) && player.primary.squaresTravelled < player.primary.range){
                                         System.out.println("range: " + currentlyUsingWeapon.range);
-                                        bullet.fire(colTo, rowTo, map, this, player.currentlyUsingWeapon, players, player, monsters, blueTurrets, redTurrets);
+                                        bullet.fire(colTo, rowTo, map, this, player.primary, players, player, monsters, blueTurrets, redTurrets);
                                         updateScreen();
                                         bullet.startTime = System.nanoTime();
                                     } else {

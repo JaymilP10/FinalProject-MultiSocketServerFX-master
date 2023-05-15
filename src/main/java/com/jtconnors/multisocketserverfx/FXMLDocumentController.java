@@ -41,7 +41,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label connectionsLabel, lblPickLoadout;
     @FXML
-    private Button connectButton, btnEnterName, btnFindMatch, btnReady;
+    private Button connectButton, btnEnterName, btnFindMatch, btnReady, btnBuyItems;
     @FXML
     private Button disconnectButton;
     @FXML
@@ -134,9 +134,9 @@ public class FXMLDocumentController implements Initializable {
                     lstSecondaryWeapon.getItems().add(RPG.weaponName);
                     lstSecondaryWeapon.getItems().add(Sniper.weaponName);
 
-                    Items grenade = new Items("Grenade", 200);
-                    grenade.damage = 300;
+                    Items grenade = new Items("Grenade", 15, 300, 200);
                     Items shieldPotion = new Items("Shield Potion", 150);
+                    Items ammo = new Items("Ammo", 50);
                     shieldPotion.shield = 100;
                     Items smite = new Items("Smite", 200);
                     items.add(grenade);
@@ -150,6 +150,9 @@ public class FXMLDocumentController implements Initializable {
                             lstStore.getItems().add(item.name + ";Damage: " + item.damage + ";Price: " + item.price);
                         if (item.name.equals("Shield Potion"))
                             lstStore.getItems().add(item.name + ";Shield: " + item.shield + ";Price: " + item.price);
+                        if (item.name.equals("Ammo"))
+                            lstStore.getItems().add(item.name + "; Price: " + ammo.price + " Amt: " + 30);
+
                     }
 //                    connectionsSB.append("s");
                 }
@@ -234,11 +237,16 @@ public class FXMLDocumentController implements Initializable {
             lstPrimaryWeapon.setVisible(false);
             lstSecondaryWeapon.setVisible(false);
             lstStats.setVisible(false);
-//            scrollPane.setVisible(true);
             txtName.setVisible(false);
             btnEnterName.setVisible(false);
+            btnFindMatch.setVisible(false);
+            pbPlayerHealth.setVisible(true);
             lblPickLoadout.setVisible(false);
             MAP.setVisible(true);
+            lstStore.setVisible(true);
+            lstInventory.setVisible(true);
+            lstHealth.setVisible(true);
+            btnBuyItems.setVisible(true);
             start();
         }
     }
@@ -281,6 +289,9 @@ public class FXMLDocumentController implements Initializable {
                     System.out.println(player.gold);
                     player.itemsOwned.add(item);
                     System.out.println(item.name);
+                    if (item.name.equals("Ammo")){
+                        player.ammo += 30;
+                    }
                 }
             }
         }
@@ -290,7 +301,10 @@ public class FXMLDocumentController implements Initializable {
         lstInventory.getItems().add(primaryWeapon.weaponName + "; Damage: " + primaryWeapon.damage);
         lstInventory.getItems().add(secondaryWeapon.weaponName + "; Damage: " + secondaryWeapon.damage);
         for (Items item : player.itemsOwned) {
-            lstInventory.getItems().add(item.name + "; Damage:" + item.damage);
+            if (item.name.equals("Grenade"))
+                lstInventory.getItems().add(item.name + "; Damage:" + item.damage);
+            if (item.name.equals("Ammo"))
+                lstInventory.getItems().add(item.name + "; Amt:" + player.ammo);
         }
 
     }
@@ -309,7 +323,6 @@ public class FXMLDocumentController implements Initializable {
         for (Weapon weapon : weapons) {
             if (weapon.weaponName.equals(itemUsed)){
                 player.isUsingItem = false;
-                currentlyUsingItem = null;
                 player.currentlyUsingWeapon = weapon;
                 currentlyUsingWeapon = weapon;
             }
@@ -721,6 +734,8 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    AnimationTimer grenadeTimer;
+
     public void start(){
         updateScreen();
         System.out.println("called start");
@@ -779,7 +794,7 @@ public class FXMLDocumentController implements Initializable {
                                                 turret.isShooting = true;
                                             }
                                             if (turret.isShooting){
-                                                if (now - turret.startTime > (900000000.0 * .3)) {
+                                                if (now - turret.startTime > (900000000.0 * .2)) {
                                                     turret.shoot(player, map, this);
                                                     updateScreen();
                                                     if (turret.targetHit){
@@ -874,9 +889,9 @@ public class FXMLDocumentController implements Initializable {
 //                                        System.out.println("in animation timer");
                                         if (currentlyUsingWeapon.startTime > 0){
 //                                            System.out.println("lollolololol");
-                                            if (now - currentlyUsingWeapon.startTime > (900000000.0 * 5) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
+                                            if (now - bullet.startTime > (900000000.0 * .01) && currentlyUsingWeapon.squaresTravelled < currentlyUsingWeapon.range){
                                                 System.out.println("range: " + currentlyUsingWeapon.range);
-                                                bullet.fire(colTo, rowTo, map, this, currentlyUsingWeapon, players, player, monsters);
+                                                bullet.fire(colTo, rowTo, map, this, currentlyUsingWeapon, players, player, monsters, blueTurrets, redTurrets);
                                                 if (bullet.x == colTo && bullet.y == rowTo){
                                                     bullet.targetReached = true;
                                                 }
@@ -885,8 +900,6 @@ public class FXMLDocumentController implements Initializable {
                                                 }
                                                 updateScreen();
                                                 bullet.startTime = System.nanoTime();
-                                            } else {
-                                                this.stop();
                                             }
                                         }
                                         lstHealth.getItems().clear();
@@ -904,7 +917,7 @@ public class FXMLDocumentController implements Initializable {
                                         }
                                     }
                                 }.start();
-                                System.out.println(i + " " + j);
+//                                System.out.println(i + " " + j);
 //                            System.out.println("oc:"+i+"or:"+j);
 
                             } else if (((Button) event.getSource()) == displayButtons[i][j] && player.isUsingItem && player.currentlyUsingItem.name.equals("Grenade")){
@@ -912,48 +925,82 @@ public class FXMLDocumentController implements Initializable {
                                 int colTo = player.xLoc + (j - 13);
 
                                 socketServer.postUpdate("Grenade:" + playerName + "r:" + rowTo + "c:" + colTo);
+                                System.out.println("is using grenade");
 
-                                int finalI = i;
                                 new AnimationTimer(){
                                     @Override
                                     public void handle(long now) {
 //                                        System.out.println("in animation timer");
+                                        if (!player.isUsingItem){
+                                            this.stop();
+                                        }
                                         if (currentlyUsingItem.startTime > 0){
-//                                            System.out.println("lollolololol");
-                                            if (now - currentlyUsingItem.startTime > (900000000.0 * 5) && currentlyUsingItem.squaresTravelled < currentlyUsingItem.range){
-                                                System.out.println("range: " + currentlyUsingWeapon.range);
-                                                currentlyUsingItem.useGrenade(map, colTo, rowTo, player.xLoc, player.yLoc, this);
-                                                if (currentlyUsingItem.x == colTo && currentlyUsingItem.y == rowTo){
-                                                    currentlyUsingItem.targetReached = true;
+                                            if (now - bullet.startTime > (900000000.0 * .1) && currentlyUsingItem.squaresTravelled < currentlyUsingItem.range){
+//                                                System.out.println("range: " + currentlyUsingWeapon.range);
+                                                bullet.throwGrenade(colTo, rowTo, map);
+                                                if (bullet.x == colTo && bullet.y == rowTo){
+                                                    bullet.targetReached = true;
                                                 }
-                                                if (currentlyUsingItem.squaresTravelled >= currentlyUsingItem.range){
-                                                    new AnimationTimer(){
+                                                if (currentlyUsingWeapon.squaresTravelled >= currentlyUsingWeapon.range){
+                                                    bullet.isBeingUsed = false;
+                                                }
+                                                if (bullet.squaresTravelled >= currentlyUsingItem.range || bullet.targetReached) {
+                                                    new AnimationTimer() {
                                                         @Override
-                                                        public void handle(long now){
-                                                            for (int k = 0; k < 5; k++) {
-                                                                if (currentlyUsingItem.startTime > (900000000 * .5)){
-                                                                    map[rowTo - k][colTo].newNum = 9;
-                                                                    map[rowTo - k][colTo - 1].newNum = 9;
-                                                                    map[rowTo - k][colTo + 1].newNum = 9;
-                                                                    map[rowTo + k][colTo].newNum = 9;
-                                                                    map[rowTo + k][colTo - 1].newNum = 9;
-                                                                    map[rowTo + k][colTo + 1].newNum = 9;
+                                                        public void handle(long now) {
+                                                            for (int k = 1; k < 5; k++) {
+                                                                System.out.println(k);
+                                                                if (now - currentlyUsingItem.startTime > (900000000 * 1.5)) {
+                                                                    System.out.println("in second animation timer");
+
+//                                                                    map[rowTo][colTo].newNum = map[rowTo][colTo].Orignum;
+//                                                                    map[rowTo - k][colTo - k].newNum = 5;
+
+                                                                    map[rowTo - k][colTo].newNum = 8;
+                                                                    map[rowTo + k][colTo].newNum = 8;
+                                                                    map[rowTo - k][colTo - k].newNum = 8;
+                                                                    map[rowTo - k][colTo + k].newNum = 8;
+                                                                    map[rowTo + k][colTo + k].newNum = 8;
+                                                                    map[rowTo + k][colTo - k].newNum = 8;
+                                                                    map[rowTo][colTo + k].newNum = 8;
+                                                                    map[rowTo][colTo - k].newNum = 8;
+
+                                                                    for (Player player : players) {
+                                                                        if ((player.yLoc == rowTo - k && player.xLoc == colTo) || (player.yLoc == rowTo + k && player.xLoc == colTo) || (player.yLoc == rowTo - k && player.xLoc == colTo - k) || (player.yLoc == rowTo - k && player.xLoc == colTo + k) || (player.yLoc == rowTo + k && player.xLoc == colTo + k) || (player.yLoc == rowTo + k && player.xLoc == colTo - k) || (player.yLoc == rowTo  && player.xLoc == colTo - k) || (player.yLoc == rowTo  && player.xLoc == colTo + k) || (player.yLoc == rowTo  && player.xLoc == colTo)) {
+                                                                            player.changeHealth(-300);
+                                                                        }
+                                                                    }
+
+//                                                                    map[rowTo - k][colTo].newNum = 8;
+//                                                                    map[rowTo - k][colTo - 1].newNum = 8;
+//                                                                    map[rowTo - k][colTo + 1].newNum = 8;
+//                                                                    map[rowTo + k][colTo].newNum = 8;
+//                                                                    map[rowTo + k][colTo - 1].newNum = 8;
+//                                                                    map[rowTo + k][colTo + 1].newNum = 8;
+
+//                                                                    map[rowTo - k - 1][colTo].newNum = map[rowTo - k - 1][colTo].Orignum;
+//                                                                    map[rowTo - k - 1][colTo - 1].newNum = map[rowTo - k - 1][colTo].Orignum;
+//                                                                    map[rowTo - k - 1][colTo + 1].newNum = map[rowTo - k - 1][colTo].Orignum;
+//                                                                    map[rowTo + k][colTo].newNum = map[rowTo - k - 1][colTo].Orignum;
+//                                                                    map[rowTo + k][colTo - 1].newNum = map[rowTo - k - 1][colTo - 1].Orignum;
+//                                                                    map[rowTo + k][colTo + 1].newNum = map[rowTo - k - 1][colTo + 1].Orignum;
                                                                 }
+
                                                             }
-                                                            for (int l = 0; l < 5; l++) {
-                                                                if (currentlyUsingItem.startTime > (900000000 * .5)){
-                                                                    map[rowTo][colTo - l].newNum = 9;
-                                                                    map[rowTo - 1][colTo - l].newNum = 9;
-                                                                    map[rowTo + 1][colTo - l].newNum = 9;
-                                                                    map[rowTo][colTo + l].newNum = 9;
-                                                                    map[rowTo - 1][colTo + l].newNum = 9;
-                                                                    map[rowTo + 1][colTo + l].newNum = 9;
-                                                                    map[rowTo - l][colTo - l].newNum = 9;
-                                                                    map[rowTo - l][colTo - l].newNum = 9;
-                                                                    map[rowTo - l][colTo - l].newNum = 9;
-                                                                }
-                                                            }
-                                                            currentlyUsingItem.startTime = System.nanoTime();
+//                                                            for (int l = 0; l < 5; l++) {
+//                                                                if (now - currentlyUsingItem.startTime > (900000000 * .5)) {
+//                                                                    map[rowTo][colTo - l].newNum = 8;
+//                                                                    map[rowTo - 1][colTo - l].newNum = 8;
+//                                                                    map[rowTo + 1][colTo - l].newNum = 8;
+//                                                                    map[rowTo][colTo + l].newNum = 8;
+//                                                                    map[rowTo - 1][colTo + l].newNum = 8;
+//                                                                    map[rowTo + 1][colTo + l].newNum = 8;
+//                                                                    map[rowTo - l][colTo - l].newNum = 8;
+//                                                                    map[rowTo - l][colTo - l].newNum = 8;
+//                                                                    map[rowTo - l][colTo - l].newNum = 8;
+//                                                                }
+//                                                            }
+
                                                             lstHealth.getItems().clear();
                                                             for (Player player : players) {
                                                                 lstHealth.getItems().add(player.name + " Health:" + player.health);
@@ -972,13 +1019,11 @@ public class FXMLDocumentController implements Initializable {
                                                 }
                                                 updateScreen();
                                                 bullet.startTime = System.nanoTime();
-                                            } else {
-                                                this.stop();
                                             }
                                         }
                                     }
                                 }.start();
-                                System.out.println(i + " " + j);
+//                                System.out.println(i + " " + j);
 //                            System.out.println("oc:"+i+"or:"+j);
                             }
                         }
@@ -1169,16 +1214,18 @@ public class FXMLDocumentController implements Initializable {
                 numPlayersReady++;
                 socketServer.postUpdate("Ready" + numPlayersReady);
                 if (numPlayersReady == 2){
-                    btnReady.setVisible(false);
                     lstPrimaryWeapon.setVisible(false);
                     lstSecondaryWeapon.setVisible(false);
                     lstStats.setVisible(false);
-//                    scrollPane.setVisible(true);
                     txtName.setVisible(false);
                     btnEnterName.setVisible(false);
+                    btnFindMatch.setVisible(false);
+                    pbPlayerHealth.setVisible(true);
                     lblPickLoadout.setVisible(false);
                     MAP.setVisible(true);
-                    pbPlayerHealth.setVisible(true);
+                    lstStore.setVisible(true);
+                    lstInventory.setVisible(true);
+                    lstHealth.setVisible(true);
                     start();
                 }
             } else if (line.startsWith("Create Player:")){
@@ -1289,12 +1336,12 @@ public class FXMLDocumentController implements Initializable {
                         new AnimationTimer(){
                             @Override
                             public void handle(long now) {
-//                                        System.out.println("in animation timer");
+                                        System.out.println("in animation timer");
                                 if (player.currentlyUsingWeapon.startTime > 0){
 //                                            System.out.println("lollolololol");
                                     if (now - player.currentlyUsingWeapon.startTime > (900000000.0 * 2) && player.currentlyUsingWeapon.squaresTravelled < player.currentlyUsingWeapon.range){
                                         System.out.println("range: " + currentlyUsingWeapon.range);
-                                        bullet.fire(colTo, rowTo, map, this, player.currentlyUsingWeapon, players, player, monsters);
+                                        bullet.fire(colTo, rowTo, map, this, player.currentlyUsingWeapon, players, player, monsters, blueTurrets, redTurrets);
                                         updateScreen();
                                         bullet.startTime = System.nanoTime();
                                     } else {
@@ -1306,22 +1353,21 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
             } else if (line.startsWith("Player Weapons:")){
-                for (Player player :
-                        players) {
-                    System.out.println(player.name);
+                for (Player player : players) {
+//                    System.out.println(player.name);
                 }
-                System.out.println(line);
+//                System.out.println(line);
                 String playerName = line.substring(line.indexOf("s:") + 2, line.indexOf("primary"));
-                System.out.println(playerName);
+//                System.out.println(playerName);
                 String primaryWeapon = line.substring(line.indexOf("y:") + 2, line.indexOf("secondary:"));
-                System.out.println(primaryWeapon);
+//                System.out.println(primaryWeapon);
                 String secondaryWeapon = line.substring(line.indexOf("dary:") + 5, line.indexOf("cu"));
-                System.out.println(secondaryWeapon);
+//                System.out.println(secondaryWeapon);
                 String current = line.substring(line.indexOf("current:") + 8);
-                System.out.println(current);
+//                System.out.println(current);
                 for (Player player : players) {
                     if (player.name.equals(playerName)){
-                        System.out.println(playerName);
+//                        System.out.println(playerName);
                         for (Weapon weapon : weapons) {
                             if (weapon.weaponName.equals(primaryWeapon)){
                                 player.primary = weapon;
@@ -1337,11 +1383,86 @@ public class FXMLDocumentController implements Initializable {
                 }
                 for (Player player : players) {
                     if (player.name.equals(playerName)){
-                        System.out.println(player.currentlyUsingWeapon.weaponName);
+//                        System.out.println(player.currentlyUsingWeapon.weaponName);
                     }
                 }
 
                 socketServer.postUpdate(line);
+            } else if (line.startsWith("Grednade:")){
+                String playerName = line.substring(line.indexOf(":") + 1, line.indexOf("r:") + 2);
+                int rowTo = Integer.parseInt(line.substring(line.indexOf("r:") + 2, line.indexOf("c:")));
+                int colTo = Integer.parseInt(line.substring(line.indexOf("c:") + 2));
+
+                for (Player player : players) {
+                    if (player.name.equals(playerName)){
+                        Bullets bullet = new Bullets(player.xLoc, player.yLoc);
+                        new AnimationTimer(){
+                            @Override
+                            public void handle(long now) {
+//                                        System.out.println("in animation timer");
+                                if (!player.isUsingItem){
+                                    this.stop();
+                                }
+                                if (currentlyUsingItem.startTime > 0){
+                                    if (now - bullet.startTime > (900000000.0 * .1) && currentlyUsingItem.squaresTravelled < currentlyUsingItem.range){
+//                                                System.out.println("range: " + currentlyUsingWeapon.range);
+                                        bullet.throwGrenade(colTo, rowTo, map);
+                                        if (bullet.x == colTo && bullet.y == rowTo){
+                                            bullet.targetReached = true;
+                                        }
+                                        if (currentlyUsingWeapon.squaresTravelled >= currentlyUsingWeapon.range){
+                                            bullet.isBeingUsed = false;
+                                        }
+                                        if (bullet.squaresTravelled >= currentlyUsingItem.range || bullet.targetReached) {
+                                            new AnimationTimer() {
+                                                @Override
+                                                public void handle(long now) {
+                                                    for (int k = 1; k < 5; k++) {
+                                                        System.out.println(k);
+                                                        if (now - currentlyUsingItem.startTime > (900000000 * 1.5)) {
+                                                            System.out.println("in second animation timer");
+
+                                                            map[rowTo - k][colTo].newNum = 8;
+                                                            map[rowTo + k][colTo].newNum = 8;
+                                                            map[rowTo - k][colTo - k].newNum = 8;
+                                                            map[rowTo - k][colTo + k].newNum = 8;
+                                                            map[rowTo + k][colTo + k].newNum = 8;
+                                                            map[rowTo + k][colTo - k].newNum = 8;
+                                                            map[rowTo][colTo + k].newNum = 8;
+                                                            map[rowTo][colTo - k].newNum = 8;
+
+                                                            for (Player player : players) {
+                                                                if ((player.yLoc == rowTo - k && player.xLoc == colTo) || (player.yLoc == rowTo + k && player.xLoc == colTo) || (player.yLoc == rowTo - k && player.xLoc == colTo - k) || (player.yLoc == rowTo - k && player.xLoc == colTo + k) || (player.yLoc == rowTo + k && player.xLoc == colTo + k) || (player.yLoc == rowTo + k && player.xLoc == colTo - k) || (player.yLoc == rowTo  && player.xLoc == colTo - k) || (player.yLoc == rowTo  && player.xLoc == colTo + k) || (player.yLoc == rowTo  && player.xLoc == colTo)) {
+                                                                    player.changeHealth(-300);
+                                                                }
+                                                            }
+
+                                                            lstHealth.getItems().clear();
+                                                            for (Player player : players) {
+                                                                lstHealth.getItems().add(player.name + " Health:" + player.health);
+                                                            }
+                                                            for (Monsters monster : monsters) {
+                                                                lstHealth.getItems().add(monster.name + " Health:" + monster.health);
+                                                            }
+                                                            for (Turrets turret : redTurrets) {
+                                                                lstHealth.getItems().add(turret.name + " Health:" + turret.health);
+                                                            }
+                                                            for (Turrets turret : blueTurrets) {
+                                                                lstHealth.getItems().add(turret.name + " Health:" + turret.health);
+                                                            }
+                                                        }
+                                                    }
+                                                    updateScreen();
+                                                    bullet.startTime = System.nanoTime();
+                                                }
+                                            }.start();
+                                        }
+                                    }
+                                }
+                            }
+                        }.start();
+                    }
+                }
             }
 
             if (line.startsWith("Move Player")){

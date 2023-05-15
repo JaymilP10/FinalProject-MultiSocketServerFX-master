@@ -57,7 +57,7 @@ class Bullets extends Weapon{
         this.startX = x;
         this.startY = y;
     }
-    public void fire(int targetX, int targetY, Map[][] map, AnimationTimer animationTimer, Weapon weapon, ArrayList<Player> players, Player thisPlayer, ArrayList<Monsters> monsters){
+    public void fire(int targetX, int targetY, Map[][] map, AnimationTimer animationTimer, Weapon weapon, ArrayList<Player> players, Player thisPlayer, ArrayList<Monsters> monsters, ArrayList<Turrets> blue, ArrayList<Turrets> red){
         if (y > 0 && y < 50 && x > 0 && x < 100)
             map[y][x].newNum = map[y][x].Orignum;
 //        System.out.println("called fire");
@@ -65,6 +65,7 @@ class Bullets extends Weapon{
 //        System.out.println("ty:" + targetY + " tx:" + targetX + " y:" + y + " x:" + x);
 //        int[] slope = new int[2];
         squaresTravelled++;
+        weapon.ammo--;
 
         if (targetY == y && targetX > x && !targetReached){
 //            slope[1] = 1;
@@ -199,6 +200,9 @@ class Bullets extends Weapon{
             if (!player.team.equals(thisPlayer.team)){
                 if ((y == player.yLoc && x == player.xLoc) || (y == player.yLoc - 1 && x == player.xLoc) || (y == player.yLoc - 1 && x == player.xLoc - 1) || (y == player.yLoc && x == player.xLoc - 1)){
                     player.changeHealth(weapon.damage * -1);
+                    if (player.health <= 0){
+                        thisPlayer.gold += 50;
+                    }
                     animationTimer.stop();
                 }
             }
@@ -207,9 +211,35 @@ class Bullets extends Weapon{
         for (Monsters monster : monsters) {
             if ((y == monster.yLoc && x == monster.xLoc) || (y == monster.yLoc - 1 && x == monster.xLoc) || (y == monster.yLoc - 1 && x == monster.xLoc - 1) || (y == monster.yLoc && x == monster.xLoc - 1)){
                 monster.changeHealth(weapon.damage * -1);
+                if (monster.health <= 0){
+                    thisPlayer.gold += 200;
+                }
                 animationTimer.stop();
             }
+        }
 
+        for (Turrets turret : blue) {
+            if (thisPlayer.team.equals("red")){
+                if ((y == turret.turretY && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX - 1) || (y == turret.turretY && x == turret.turretX - 1)){
+                    turret.health -= thisPlayer.currentlyUsingWeapon.damage;
+                    if (turret.health <= 0){
+                        thisPlayer.gold += 200;
+                    }
+                    animationTimer.stop();
+                }
+            }
+        }
+
+        for (Turrets turret : red) {
+            if (thisPlayer.team.equals("blue")){
+                if ((y == turret.turretY && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX) || (y == turret.turretY - 1 && x == turret.turretX - 1) || (y == turret.turretY && x == turret.turretX - 1)){
+                    turret.health -= thisPlayer.currentlyUsingWeapon.damage;
+                    if (turret.health <= 0){
+                        thisPlayer.gold += 200;
+                    }
+                    animationTimer.stop();
+                }
+            }
         }
 
 
@@ -318,5 +348,65 @@ class Bullets extends Weapon{
 //        System.out.println("r:" + r);
 //        return r;
     }
+
+    public void throwGrenade(int targetX, int targetY, Map[][] map){
+        if (y > 0 && y < 50 && x > 0 && x < 100)
+            map[y][x].newNum = map[y][x].Orignum;
+//        System.out.println("called fire");
+//        System.out.println(squaresTravelled);
+//        System.out.println("ty:" + targetY + " tx:" + targetX + " y:" + y + " x:" + x);
+//        int[] slope = new int[2];
+        squaresTravelled++;
+
+        if (targetY == y && targetX > x && !targetReached){
+//            slope[1] = 1;
+            x++;
+        } else if (targetY == y && targetX < x && !targetReached){
+//            slope[1] = -1;
+            x--;
+        } else if (targetX == x && targetY > y && !targetReached){
+//            slope[0] = 1;
+            y++;
+        } else if (targetX == x && targetY < y && !targetReached){
+//            slope[0] = -1;
+            y--;
+        } else if (targetY > y && targetY - y == slope[0] && !targetReached){
+//            slope[0] = 1;
+            y += 1;
+        } else if (targetY < y && targetY - y == slope[0] && !targetReached){
+//            slope[0] = -1;
+            y -= 1;
+        } else if (targetY > y && targetX > x && !targetReached){
+            slope = reduceFraction(targetY - y, targetX - x);
+            y += slope[0];
+            x += slope[1];
+        } else if (targetY > y && targetX < x && !targetReached){
+            slope = reduceFraction(targetY - y, x - targetX);
+            y += slope[0];
+            x -= slope[1];
+//            slope[1] *= -1;
+        } else if (targetY < y && targetX > x && !targetReached){
+            slope = reduceFraction(y - targetY, targetX - x);
+            y -= slope[0];
+            x += slope[1];
+//            slope[0] *= -1;
+        } else if (targetY < y && targetX < x && !targetReached){
+            slope = reduceFraction(y - targetY, x - targetX);
+            y -= slope[0];
+            x -= slope[1];
+//            slope[0] *= -1;
+//            slope[1] *= -1;
+        }
+
+        if (targetY == y && targetX == x){
+            targetReached = true;
+        }
+
+        if (x < 100 && y < 50 && x > 0 && y > 0){
+//            buttons[x][y].setStyle("-fx-background-color: brown");
+            map[y][x].newNum = 7;
+        }
+    }
+
 }
 

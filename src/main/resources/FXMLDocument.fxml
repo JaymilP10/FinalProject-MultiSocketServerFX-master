@@ -38,9 +38,9 @@
       <ListView fx:id="lstStats" layoutX="538.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
       <Button fx:id="btnReady" layoutX="369.0" layoutY="318.0" mnemonicParsing="false" onAction="#pickLoadout" text="READY" visible="false" />
       <ProgressBar fx:id="pbPlayerHealth" layoutX="482.0" layoutY="328.0" prefHeight="17.0" prefWidth="71.0" progress="0.0" visible="false" />
-      <ListView fx:id="lstStore" layoutX="985.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0" />
-      <ListView fx:id="lstInventory" layoutX="985.0" layoutY="269.0" onMouseClicked="#useItem" prefHeight="200.0" prefWidth="200.0" />
-      <ListView fx:id="lstHealth" layoutX="985.0" layoutY="495.0" onMouseClicked="#useItem" prefHeight="200.0" prefWidth="200.0" />
-      <Button layoutX="1061.0" layoutY="238.0" mnemonicParsing="false" onAction="#buyItems" prefHeight="17.0" prefWidth="48.0" text="Buy" />
+      <ListView fx:id="lstStore" layoutX="985.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
+      <ListView fx:id="lstInventory" layoutX="985.0" layoutY="269.0" onMouseClicked="#useItem" prefHeight="200.0" prefWidth="200.0" visible="false" />
+      <ListView fx:id="lstHealth" layoutX="985.0" layoutY="495.0" onMouseClicked="#useItem" prefHeight="200.0" prefWidth="200.0" visible="false" />
+      <Button fx:id="btnBuyItems" layoutX="1061.0" layoutY="238.0" mnemonicParsing="false" onAction="#buyItems" prefHeight="17.0" prefWidth="48.0" text="Buy" visible="false" />
    </children>
 </AnchorPane>

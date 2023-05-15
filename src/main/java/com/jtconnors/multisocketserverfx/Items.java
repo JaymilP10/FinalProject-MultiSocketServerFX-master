@@ -9,7 +9,7 @@ public class Items {
     String name;
     int x;
     int y;
-    int squaresTravelled;
+    int squaresTravelled = 0;
     int range;
     int damage;
     double startTime;
@@ -24,6 +24,7 @@ public class Items {
     public Items(String name, int price){
         this.name = name;
         this.price = price;
+        startTime = System.nanoTime();
     }
 
     public Items(String name, int range, int damage, int price){
@@ -31,6 +32,7 @@ public class Items {
         this.range = range;
         this.damage = damage;
         this.price = price;
+        startTime = System.nanoTime();
     }
 
     public void useGrenade(Map[][] map, int targetX, int targetY, int x, int y, AnimationTimer animationTimer){

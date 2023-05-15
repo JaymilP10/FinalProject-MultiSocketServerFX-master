@@ -28,7 +28,7 @@ public class Turrets {
         this.name = name;
         this.health = health;
         this.damage = damage;
-        this.range = 10;
+        this.range = range;
         if (name.equals("blueTopFrontTurret")){
             turretX = 42;
             turretY = 5;

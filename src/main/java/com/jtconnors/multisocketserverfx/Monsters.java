@@ -58,6 +58,9 @@ public class Monsters {
 
     public void changeHealth(int amount){
         health += amount;
+        if (health < 0){
+            health = 0;
+        }
         double progress = health/maxHealth;
         healthBar.setProgress(progress);
     }
@@ -144,24 +147,34 @@ public class Monsters {
 //        img[0][0].setFitWidth(40);
 //        img[0][0].setFitHeight(40);
 //        buttons[0][0].setGraphic(img[0][0]);
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                String pathName = "src/main/resources/Images/frame" + frameNum + "/" + j + "" + i + ".png";
-                try {
-                    FileInputStream fileInputStream = new FileInputStream(pathName);
-                    tempCard = new Image(fileInputStream);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                img[i][j].setImage(tempCard);
-                img[i][j].setPreserveRatio(true);
+        if (health > 0){
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    String pathName = "src/main/resources/Images/frame" + frameNum + "/" + j + "" + i + ".png";
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream(pathName);
+                        tempCard = new Image(fileInputStream);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    img[i][j].setImage(tempCard);
+                    img[i][j].setPreserveRatio(true);
 //                img[i][j].setFitHeight(buttons[i + 30][j + 40].getPrefHeight());
 //                img[i][j].setFitWidth(buttons[i + 30][j + 40].getPrefWidth());
-                img[i][j].setFitHeight(25);
-                img[i][j].setFitWidth(25);
-                buttons[i + 30][j + 40].setStyle("");
-                buttons[i + 30][j + 40].setGraphic(img[i][j]);
+                    img[i][j].setFitHeight(25);
+                    img[i][j].setFitWidth(25);
+                    buttons[i + 30][j + 40].setStyle("");
+                    buttons[i + 30][j + 40].setGraphic(img[i][j]);
+                }
+            }
+        } else {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    buttons[i + 30][j + 40].setStyle("");
+                    buttons[i + 30][j + 40].setGraphic(null);
+                }
             }
         }
+
     }
 }

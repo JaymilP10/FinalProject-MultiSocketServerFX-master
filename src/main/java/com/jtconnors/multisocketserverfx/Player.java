@@ -26,6 +26,7 @@ public class Player {
     int gold;
     int respawnTime = 60;
     boolean isUsingItem;
+    int ammo;
 
     ProgressBar healthBar = new ProgressBar(1);
 
@@ -71,8 +72,14 @@ public class Player {
 //        System.out.println(progress);
         healthBar.setProgress(progress);
         if (health <= 0){
-            xLoc = 5;
-            yLoc = 23;
+            if (team.equals("blue")){
+                xLoc = 5;
+                yLoc = 23;
+            } else {
+                xLoc = 94;
+                yLoc = 23;
+            }
+            health = 250;
         }
     }
 
@@ -155,8 +162,6 @@ public class Player {
             tempx--;
         }
     }
-
-
 
     public void changeWeapon(Weapon primary, Weapon secondary){
         this.primary = primary;

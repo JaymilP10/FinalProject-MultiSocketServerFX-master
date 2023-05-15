@@ -699,6 +699,14 @@ public class FXMLDocumentController implements Initializable {
 //            map[11][i + 24].newNum = 5;
 //            map[38][i + 24].Orignum = 5;
 //            map[38][i + 24].newNum = 5;
+
+
+            for (int l = 24; l < 27; l++) {
+                for (int m = 4; m < 7; m++) {
+                    map[l][m].Orignum = 11;
+                    map[l][m].Orignum = 11;
+                }
+            }
         }
 
         dragon = new Monsters("Dragon", 50, 500, 10, .25, 43, 32, buttons, 10);
@@ -1152,6 +1160,9 @@ public class FXMLDocumentController implements Initializable {
                 } else if (map[i][c].newNum == 9){
                     //red
                     buttons[i][c].setStyle("-fx-background-color: #f7534a");
+                } else if (map[i][c].newNum == 11){
+                    //red
+                    buttons[i][c].setStyle("-fx-background-color: #30486e");
                 }
             }
         }
@@ -1338,7 +1349,7 @@ public class FXMLDocumentController implements Initializable {
                             @Override
                             public void handle(long now) {
                                 System.out.println("in animation timer");
-                                if (player.currentlyUsingWeapon.startTime > 0){
+                                if (player.primary.startTime > 0){
 //                                            System.out.println("lollolololol");
                                     if (now - player.currentlyUsingWeapon.startTime > (900000000.0 * 2) && player.currentlyUsingWeapon.squaresTravelled < player.currentlyUsingWeapon.range){
                                         System.out.println("range: " + currentlyUsingWeapon.range);

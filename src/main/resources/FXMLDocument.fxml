@@ -3,19 +3,20 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
 <AnchorPane onKeyPressed="#move" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jtconnors.multisocketserverfx.FXMLDocumentController">
    <children>
-      <Label fx:id="connectionsLabel" layoutX="348.0" layoutY="200.0" text="1/8 Players Found" />
-      <Button fx:id="disconnectButton" layoutX="351.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleDisconnectButton" text="Leave Queue" />
-      <Label fx:id="lblPort" layoutX="365.0" layoutY="360.0" text="Port:" />
-      <TextField fx:id="portTextField" layoutX="394.0" layoutY="355.0" minWidth="-Infinity" prefHeight="25.0" prefWidth="48.0" text="2015" />
+      <Label fx:id="connectionsLabel" layoutX="395.0" layoutY="200.0" text="1/8 Players Found" />
+      <Button fx:id="disconnectButton" layoutX="398.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleDisconnectButton" text="Leave Queue" />
+      <Label fx:id="lblPort" layoutX="412.0" layoutY="360.0" text="Port:" />
+      <TextField fx:id="portTextField" layoutX="441.0" layoutY="355.0" minWidth="-Infinity" prefHeight="25.0" prefWidth="48.0" text="2015" />
 <!--      <ScrollPane fx:id="scrollPane" prefHeight="345.0" prefWidth="1000.0" visible="false">-->
 <!--         <content>-->
-            <GridPane fx:id="MAP" layoutX="160.0" layoutY="50.0" visible="false">
+            <GridPane fx:id="MAP" layoutX="190.0" layoutY="50.0" visible="false">
 <!--        <columnConstraints>-->
 <!--          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
 <!--          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
@@ -28,13 +29,16 @@
       </GridPane>
 <!--         </content>-->
 <!--      </ScrollPane>-->
-      <TextField fx:id="txtName" layoutX="300.0" layoutY="60.0" promptText="Enter Name" />
-      <Button fx:id="btnEnterName" layoutX="471.0" layoutY="60.0" mnemonicParsing="false" onAction="#enterName" text="Enter" />
-      <Button fx:id="btnFindMatch" layoutX="351.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleConnectButton" text="Find Match" visible="false" />
+      <TextField fx:id="txtName" layoutX="347.0" layoutY="60.0" promptText="Enter Name" />
+      <Button fx:id="btnEnterName" layoutX="518.0" layoutY="60.0" mnemonicParsing="false" onAction="#enterName" text="Enter" />
+      <Button fx:id="btnFindMatch" layoutX="401.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleConnectButton" text="Find Match" visible="false" />
       <ListView fx:id="lstPrimaryWeapon" layoutX="27.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
       <Label fx:id="lblPickLoadout" layoutX="345.0" layoutY="35.0" text="Pick Loadout" visible="false" />
       <ListView fx:id="lstSecondaryWeapon" layoutX="281.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
-      <ListView fx:id="lstItems" layoutX="538.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
+      <ListView fx:id="lstStats" layoutX="538.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
       <Button fx:id="btnReady" layoutX="369.0" layoutY="318.0" mnemonicParsing="false" onAction="#pickLoadout" text="READY" visible="false" />
+      <ProgressBar fx:id="pbPlayerHealth" layoutX="482.0" layoutY="328.0" prefHeight="17.0" prefWidth="71.0" progress="0.0" visible="false" />
+      <ListView fx:id="lstBuyItems" layoutX="760.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="lstInventory" layoutX="760.0" layoutY="260.0" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

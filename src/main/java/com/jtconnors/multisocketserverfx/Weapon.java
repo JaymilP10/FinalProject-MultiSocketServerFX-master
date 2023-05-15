@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 public class Weapon {
 
@@ -39,14 +40,24 @@ class Bullets extends Weapon{
 
     int x;
     int y;
+    int startX;
+    int startY;
     double startTime;
     int[] slope = new int[2];
+    boolean targetReached = false;
+    boolean isBeingUsed = false;
+
+    public Bullets(){
+
+    }
 
     public Bullets(int x, int y){
         this.x = x;
         this.y = y;
+        this.startX = x;
+        this.startY = y;
     }
-    public void fire(int targetX, int targetY, Map[][] map, AnimationTimer animationTimer, Weapon weapon){
+    public void fire(int targetX, int targetY, Map[][] map, AnimationTimer animationTimer, Weapon weapon, ArrayList<Player> players, Player thisPlayer, ArrayList<Monsters> monsters){
         if (y > 0 && y < 50 && x > 0 && x < 100)
             map[y][x].newNum = map[y][x].Orignum;
 //        System.out.println("called fire");
@@ -55,35 +66,149 @@ class Bullets extends Weapon{
 //        int[] slope = new int[2];
         squaresTravelled++;
 
-        if (targetY == y && targetX > x){
+        if (targetY == y && targetX > x && !targetReached){
+//            slope[1] = 1;
             x++;
-        } else if (targetY == y && targetX < x){
+        } else if (targetY == y && targetX < x && !targetReached){
+//            slope[1] = -1;
             x--;
-        } else if (targetX == x && targetY > y){
+        } else if (targetX == x && targetY > y && !targetReached){
+//            slope[0] = 1;
             y++;
-        } else if (targetX == x && targetY < y){
+        } else if (targetX == x && targetY < y && !targetReached){
+//            slope[0] = -1;
             y--;
-        } else if (targetY > y && targetY - y == slope[0]){
+        } else if (targetY > y && targetY - y == slope[0] && !targetReached){
+//            slope[0] = 1;
             y += 1;
-        } else if (targetY < y && targetY - y == slope[0]){
+        } else if (targetY < y && targetY - y == slope[0] && !targetReached){
+//            slope[0] = -1;
             y -= 1;
-        } else if (targetY > y && targetX > x){
+        } else if (targetY > y && targetX > x && !targetReached){
             slope = reduceFraction(targetY - y, targetX - x);
             y += slope[0];
             x += slope[1];
-        } else if (targetY > y && targetX < x){
+        } else if (targetY > y && targetX < x && !targetReached){
             slope = reduceFraction(targetY - y, x - targetX);
             y += slope[0];
             x -= slope[1];
-        } else if (targetY < y && targetX > x){
+//            slope[1] *= -1;
+        } else if (targetY < y && targetX > x && !targetReached){
             slope = reduceFraction(y - targetY, targetX - x);
             y -= slope[0];
             x += slope[1];
-        } else if (targetY < y && targetX < x){
+//            slope[0] *= -1;
+        } else if (targetY < y && targetX < x && !targetReached){
             slope = reduceFraction(y - targetY, x - targetX);
             y -= slope[0];
             x -= slope[1];
+//            slope[0] *= -1;
+//            slope[1] *= -1;
         }
+
+        if (targetY == y && targetX == x){
+            targetReached = true;
+        }
+
+        if (targetReached && squaresTravelled < weapon.range){
+            if (targetY == startY && targetX > startX){
+//            slope[1] = 1;
+                x++;
+            } else if (targetY == startY && targetX < startX){
+//            slope[1] = -1;
+                x--;
+            } else if (targetX == startX && targetY > startY){
+//            slope[0] = 1;
+                y++;
+            } else if (targetX == startX && targetY < startY){
+//            slope[0] = -1;
+                y--;
+            } else if (targetY > startY && targetY - startY == slope[0]) {
+//            slope[0] = 1;
+                y += 1;
+//            } else if (targetY < startY && targetY - startY == slope[0]){
+////            slope[0] = -1;
+//                y -= 1;
+//            } else if (targetY > startY && targetX > startX){
+                slope = reduceFraction(targetY - startY, targetX - startX);
+                y += slope[0];
+                x += slope[1];
+            } else if (targetY > startY && targetX < startX){
+                slope = reduceFraction(targetY - startY, startX - targetX);
+                y += slope[0];
+                x -= slope[1];
+//            slope[1] *= -1;
+            } else if (targetY < startY && targetX > startX){
+                slope = reduceFraction(startY - targetY, targetX - startX);
+                y -= slope[0];
+                x += slope[1];
+//            slope[0] *= -1;
+            } else if (targetY < startY && targetX < startX){
+                slope = reduceFraction(startY - targetY, startX - targetX);
+                y -= slope[0];
+                x -= slope[1];
+//            slope[0] *= -1;
+//            slope[1] *= -1;
+            }
+        }
+
+
+
+//        if (squaresTravelled <= weapon.range){
+//            y += slope[0];
+//            x += slope[1];
+//        }
+
+//        if (targetY == y && targetX > x){
+//            x++;
+//        } else if (targetY == y && targetX < x){
+//            x--;
+//        } else if (targetX == x && targetY > y){
+//            y++;
+//        } else if (targetX == x && targetY < y){
+//            y--;
+//        } else if (targetY > y && targetY - y == slope[0]){
+//            y += 1;
+//        } else if (targetY < y && targetY - y == slope[0]){
+//            y -= 1;
+////        }
+//        } else if (targetY > y && targetX > x){
+//            slope = reduceFraction(targetY - y, targetX - x);
+//            y += slope[0];
+//            x += slope[1];
+//        } else if (targetY > y && targetX < x){
+//            slope = reduceFraction(targetY - y, x - targetX);
+//            y += slope[0];
+//            x -= slope[1];
+//        } else if (targetY < y && targetX > x){
+//            slope = reduceFraction(y - targetY, targetX - x);
+//            y -= slope[0];
+//            x += slope[1];
+//        } else if (targetY < y && targetX < x){
+//            slope = reduceFraction(y - targetY, x - targetX);
+//            y -= slope[0];
+//            x -= slope[1];
+//        }
+//        else {
+//            slope = reduceFraction(targetY - y, targetX - x);
+//            y += slope[0];
+//            x += slope[1];
+//        }
+
+        for (Player player : players) {
+            if (!player.team.equals(thisPlayer.team)){
+                if ((y == player.yLoc && x == player.xLoc) || (y == player.yLoc - 1 && x == player.xLoc) || (y == player.yLoc - 1 && x == player.xLoc - 1) || (y == player.yLoc && x == player.xLoc - 1)){
+                    player.changeHealth(weapon.damage * -1);
+                    animationTimer.stop();
+                }
+            }
+        }
+
+        for (Monsters monster : monsters) {
+
+
+        }
+
 
 //        if (targetX > x && targetX - x == slope[1]){
 //            x += 1;
@@ -96,7 +221,8 @@ class Bullets extends Weapon{
             animationTimer.stop();
         }
         if (map[y][x].newNum == 8 || map[y][x].Orignum == 5){
-            System.out.println("adslfjas;dljkfa;lsdjfk;alksdjfa;ldksjfa;sdlkfja;sdlkfjalkdsj");
+            map[y][x].newNum = map[y][x].Orignum;
+//            System.out.println("adslfjas;dljkfa;lsdjfk;alksdjfa;ldksjfa;sdlkfja;sdlkfjalkdsj");
             animationTimer.stop();
         }
 

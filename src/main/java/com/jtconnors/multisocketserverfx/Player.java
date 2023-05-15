@@ -22,6 +22,10 @@ public class Player {
     double speed;
     int xLoc;
     int yLoc;
+    String team;
+    int gold;
+    int respawnTime = 60;
+    boolean isUsingItem;
 
     ProgressBar healthBar = new ProgressBar(1);
 
@@ -29,7 +33,7 @@ public class Player {
     Weapon secondary;
     Weapon currentlyUsingWeapon;
 
-    public Player(String name, int level, int health, int healthIncrease, double speed, int xLoc, int yLoc, Map[][] map){
+    public Player(String name, int level, int health, int healthIncrease, double speed, int xLoc, int yLoc, Map[][] map, String team){
         this.level = level;
         this.health = health;
         this.maxHealth = health;
@@ -38,16 +42,34 @@ public class Player {
         this.xLoc = xLoc;
         this.yLoc = yLoc;
         this.name = name;
-        map[yLoc][xLoc].newNum = 6;
-        map[yLoc - 1][xLoc].newNum = 6;
-        map[yLoc][xLoc - 1].newNum = 6;
-        map[yLoc - 1][xLoc - 1].newNum = 6;
+        this.team = team;
+        if (team.equals("blue")){
+            map[yLoc][xLoc].newNum = 6;
+            map[yLoc - 1][xLoc].newNum = 6;
+            map[yLoc][xLoc - 1].newNum = 6;
+            map[yLoc - 1][xLoc - 1].newNum = 6;
+        } else if (team.equals("red")){
+            map[yLoc][xLoc].newNum = 9;
+            map[yLoc - 1][xLoc].newNum = 9;
+            map[yLoc][xLoc - 1].newNum = 9;
+            map[yLoc - 1][xLoc - 1].newNum = 9;
+        }
+
     }
 
     public void changeHealth(int amount){
+        System.out.println("health:" + health);
+        System.out.println("amount:" + amount);
         health += amount;
-        double progress = health/maxHealth;
+        System.out.println("healthafter:" + health);
+        System.out.println("maxhealth:" + maxHealth);
+        double progress = (double) health/maxHealth;
+        System.out.println(progress);
         healthBar.setProgress(progress);
+        if (health <= 0){
+            xLoc = 5;
+            yLoc = 23;
+        }
     }
 
     long startTime = System.nanoTime();

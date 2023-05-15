@@ -11,9 +11,26 @@ public class Items {
     int y;
     int squaresTravelled;
     int range;
+    int damage;
+    double startTime;
+    boolean targetReached = false;
+    int price;
+    int shield;
 
-    public Items(String name){
+    public Items(){
+
+    }
+
+    public Items(String name, int price){
         this.name = name;
+        this.price = price;
+    }
+
+    public Items(String name, int range, int damage, int price){
+        this.name = name;
+        this.range = range;
+        this.damage = damage;
+        this.price = price;
     }
 
     public void useGrenade(Map[][] map, int targetX, int targetY, int x, int y, AnimationTimer animationTimer){

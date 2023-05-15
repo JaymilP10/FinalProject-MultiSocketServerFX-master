@@ -24,13 +24,15 @@ public class Monsters {
     int range;
     double startTime;
     int respawnTime;
+    String name;
 
     ProgressBar healthBar = new ProgressBar(1);
 
     Weapon primary;
     Weapon secondary;
 
-    public Monsters(int range, int health, int healthIncrease, double speed, int xLoc, int yLoc, Button[][] buttons, int respawnTime){
+    public Monsters(String name, int range, int health, int healthIncrease, double speed, int xLoc, int yLoc, Button[][] buttons, int respawnTime){
+        this.name = name;
         this.range = range;
         this.health = health;
         this.maxHealth = health;

@@ -29,9 +29,13 @@ public class Player {
 
     ProgressBar healthBar = new ProgressBar(1);
 
+    ArrayList<Items> itemsOwned = new ArrayList<>();
+
     Weapon primary;
     Weapon secondary;
     Weapon currentlyUsingWeapon;
+
+    Items currentlyUsingItem;
 
     public Player(String name, int level, int health, int healthIncrease, double speed, int xLoc, int yLoc, Map[][] map, String team){
         this.level = level;
@@ -58,13 +62,13 @@ public class Player {
     }
 
     public void changeHealth(int amount){
-        System.out.println("health:" + health);
-        System.out.println("amount:" + amount);
+//        System.out.println("health:" + health);
+//        System.out.println("amount:" + amount);
         health += amount;
-        System.out.println("healthafter:" + health);
-        System.out.println("maxhealth:" + maxHealth);
+//        System.out.println("healthafter:" + health);
+//        System.out.println("maxhealth:" + maxHealth);
         double progress = (double) health/maxHealth;
-        System.out.println(progress);
+//        System.out.println(progress);
         healthBar.setProgress(progress);
         if (health <= 0){
             xLoc = 5;

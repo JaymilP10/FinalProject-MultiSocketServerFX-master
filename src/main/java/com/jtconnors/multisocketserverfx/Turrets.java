@@ -28,7 +28,7 @@ public class Turrets {
         this.name = name;
         this.health = health;
         this.damage = damage;
-        this.range = range;
+        this.range = 10;
         if (name.equals("blueTopFrontTurret")){
             turretX = 42;
             turretY = 5;
@@ -106,9 +106,9 @@ public class Turrets {
     }
 
     public void shoot(Player player, Map[][] map, AnimationTimer animationTimer){
-        System.out.println("shooting");
-        System.out.println("x:" + x);
-        System.out.println("y:" + y);
+//        System.out.println("shooting");
+//        System.out.println("x:" + x);
+//        System.out.println("y:" + y);
         if (y > 0 && y < 50 && x > 0 && x < 100)
             map[y][x].newNum = map[y][x].Orignum;
 //        System.out.println("called fire");
@@ -151,6 +151,7 @@ public class Turrets {
         }
 
         if ((y == player.yLoc && x == player.xLoc) || (y == player.yLoc - 1 && x == player.xLoc) || (y == player.yLoc - 1 && x == player.xLoc - 1) || (y == player.yLoc && x == player.xLoc - 1)){
+            player.changeHealth(damage * -1);
             System.out.println("target hit");
             targetHit = true;
 //            animationTimer.stop();

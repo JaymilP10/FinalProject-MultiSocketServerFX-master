@@ -61,7 +61,7 @@ class Bullets extends Weapon{
         if (y > 0 && y < 50 && x > 0 && x < 100)
             map[y][x].newNum = map[y][x].Orignum;
 //        System.out.println("called fire");
-        System.out.println(squaresTravelled);
+//        System.out.println(squaresTravelled);
 //        System.out.println("ty:" + targetY + " tx:" + targetX + " y:" + y + " x:" + x);
 //        int[] slope = new int[2];
         squaresTravelled++;
@@ -205,7 +205,10 @@ class Bullets extends Weapon{
         }
 
         for (Monsters monster : monsters) {
-
+            if ((y == monster.yLoc && x == monster.xLoc) || (y == monster.yLoc - 1 && x == monster.xLoc) || (y == monster.yLoc - 1 && x == monster.xLoc - 1) || (y == monster.yLoc && x == monster.xLoc - 1)){
+                monster.changeHealth(weapon.damage * -1);
+                animationTimer.stop();
+            }
 
         }
 
@@ -245,7 +248,7 @@ class Bullets extends Weapon{
     }
 
     public static int[] reduceFraction(int numerator, int denominator) {
-        System.out.println("nume: " + numerator + " deno:" + denominator);
+//        System.out.println("nume: " + numerator + " deno:" + denominator);
 
 //        int n = numerator;
 //        int d = denominator;
@@ -269,7 +272,7 @@ class Bullets extends Weapon{
         int[] result = new int[2];
 
         int gcd = findGCD(numerator, denominator);
-        System.out.println("GCD: " + gcd);
+//        System.out.println("GCD: " + gcd);
         if (gcd == 1){
 //            gcd = findGCD(numerator - 1, denominator);
             return new int[] {1, 1};
